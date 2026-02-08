@@ -1,0 +1,18 @@
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+RewriteCond %{DOCUMENT_ROOT}/../install.lock -f
+RewriteRule ^install/? - [F,L]
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ index.php [L]
+</IfModule>
+
+<FilesMatch "^(\.env|config\.local\.php|config\.php|bootstrap\.php|routes\.php|run_migrations\.php)$">
+  Require all denied
+</FilesMatch>

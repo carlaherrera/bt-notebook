@@ -1,0 +1,12 @@
+/database/database.sqlite
+/.windsurf
+/docs
+/debug.log
+/.env
+/config.local.php
+/php-error.log
+/logs
+/public/uploads/configuracoes
+/public/public
+/.agent
+/FUNCIONALIDADE_RECUPERACAO_SENHA.md
