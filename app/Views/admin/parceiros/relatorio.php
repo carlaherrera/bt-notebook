@@ -61,7 +61,7 @@
         </div>
         <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
             <p class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Faturado estimado</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1"><?= htmlspecialchars($totais['faturado'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1"><?= htmlspecialchars($totais['faturado'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Período selecionado</p>
         </div>
     </div>
@@ -104,7 +104,7 @@
             <div class="space-y-2 text-xs text-gray-600 dark:text-gray-300">
                 <div class="flex items-center justify-between rounded-xl border border-gray-100 dark:border-gray-800 px-3 py-2 bg-gray-50 dark:bg-gray-800/60">
                     <span>Período</span>
-                    <span class="font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($periodo['inicio'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · <?= htmlspecialchars($periodo['fim'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                    <span class="font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($periodo['inicio'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · <?= htmlspecialchars($periodo['fim'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                 </div>
                 <div class="flex items-center justify-between rounded-xl border border-gray-100 dark:border-gray-800 px-3 py-2 bg-gray-50 dark:bg-gray-800/60">
                     <span>Parceiro</span>
@@ -136,8 +136,8 @@
                     </div>
                     <div class="text-right text-sm font-semibold text-gray-900 dark:text-white">
                         <?= (int)($mov['quantidade'] ?? 0) ?>
-                        <div class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($mov['valor'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
-                        <div class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($mov['data'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
+                        <div class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($mov['valor'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
+                        <div class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($mov['data'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
                     </div>
                 </div>
             <?php endforeach; ?>

@@ -29,79 +29,81 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     Voltar
                 </a>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
+                <button form="form-mov" type="submit" class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
                     <i data-lucide="save" class="w-4 h-4"></i>
-                    Salvar demo
+                    Salvar
                 </button>
             </div>
         </div>
     </header>
 
-    <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
+    <form id="form-mov" action="/admin/movimentacoes" method="POST" class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
+        <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>" />
+
         <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
             <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
                 <span class="font-semibold">Tipo</span>
-                <select class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                <select name="tipo" required class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                    <option value="" disabled selected>Selecione</option>
                     <?php foreach ($tipos as $t): ?>
-                        <option><?= htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
+                        <option value="<?= htmlspecialchars($t, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
+                            <?= htmlspecialchars(ucfirst($t), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
             </label>
 
             <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
-                <span class="font-semibold">Parceiro (para transferências/devoluções/vendas parceiro)</span>
-                <select class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
-                    <option>Loja</option>
+                <span class="font-semibold">Parceiro (opcional)</span>
+                <select name="parceiro_id" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                    <option value="">Loja</option>
                     <?php foreach ($parceiros as $p): ?>
-                        <option><?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
+                        <option value="<?= (int)($p['id'] ?? 0) ?>"><?= htmlspecialchars($p['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
 
             <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
                 <span class="font-semibold">Produto</span>
-                <select class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                <select name="produto" required class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                    <option value="" disabled selected>Selecione</option>
                     <?php foreach ($produtos as $p): ?>
-                        <option><?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
+                        <option value="<?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"><?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>
 
             <div class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
                 <span class="font-semibold">Quantidade</span>
-                <input type="number" value="10" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                <input name="quantidade" type="number" min="1" value="1" required class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
             </div>
         </div>
 
         <div class="grid gap-4 grid-cols-1 md:grid-cols-3">
             <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
                 <span class="font-semibold">NF / Referência</span>
-                <input type="text" value="NF-2026-00123" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                <input name="nf_ref" type="text" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
             </label>
             <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
                 <span class="font-semibold">Lote</span>
-                <input type="text" value="L2301" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                <input name="lote" type="text" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
             </label>
             <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
                 <span class="font-semibold">Data/hora</span>
-                <input type="datetime-local" value="2026-01-29T10:00" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                <input name="datahora" type="datetime-local" value="<?= htmlspecialchars(date('Y-m-d\TH:i'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" required class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
             </label>
         </div>
 
         <div class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
             <span class="font-semibold">Observações</span>
-            <textarea rows="3" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" placeholder="Ex: Envio semanal para parceiro, incluir amostras."></textarea>
+            <textarea name="observacao" rows="3" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" placeholder="Ex: Envio semanal para parceiro, incluir amostras."></textarea>
         </div>
 
         <div class="flex flex-wrap gap-2 text-xs text-gray-600 dark:text-gray-300">
             <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/60">
                 <i data-lucide="shield-check" class="w-4 h-4"></i>
-                CSRF ok
-            </span>
-            <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/60">
-                <i data-lucide="info" class="w-4 h-4"></i>
-                Dados são mock
+                Protegido por CSRF
             </span>
         </div>
-    </div>
+    </form>
 </section>

@@ -186,6 +186,15 @@ class ConfiguracoesController extends Controller
     {
         $pdo = Database::getConnection();
         $prefsTable = Database::table('user_preferences');
+        $usersTable = Database::table('usuarios');
+
+        // só segue se o usuário existir
+        $existsStmt = $pdo->prepare('SELECT id FROM ' . $usersTable . ' WHERE id = :id LIMIT 1');
+        $existsStmt->execute(['id' => $userId]);
+        if (!$existsStmt->fetchColumn()) {
+            return;
+        }
+
         $stmt = $pdo->prepare('SELECT id FROM ' . $prefsTable . ' WHERE user_id = :uid LIMIT 1');
         $stmt->execute(['uid' => $userId]);
         $id = $stmt->fetchColumn();

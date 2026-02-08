@@ -3,34 +3,37 @@
 namespace App\Controllers\Admin;
 
 use App\Core\Controller;
+use App\Core\Database;
+use PDO;
 
 class RelatoriosController extends Controller
 {
+    private PDO $db;
+
     public function __construct()
     {
         $this->requireRole('admin');
         $this->requireActive();
+        $this->db = Database::getConnection();
     }
 
     public function index(): void
     {
-        $relatorios = [
-            ['nome' => 'Estoque loja física', 'descricao' => 'Posição atual de estoque da loja', 'formato' => 'PDF, Excel', 'ultima' => '2026-01-28 10:15'],
-            ['nome' => 'Estoque por parceiro', 'descricao' => 'Snapshot consignado por parceiro', 'formato' => 'PDF, Excel', 'ultima' => '2026-01-28 09:40'],
-            ['nome' => 'Movimentações por período', 'descricao' => 'Entradas, transferências, vendas e devoluções', 'formato' => 'PDF, Excel, CSV', 'ultima' => '2026-01-27 18:00'],
-            ['nome' => 'Produtos abaixo do mínimo', 'descricao' => 'Itens críticos ou em alerta', 'formato' => 'PDF, Excel', 'ultima' => '2026-01-28 08:10'],
-            ['nome' => 'Desempenho por parceiro', 'descricao' => 'Vendas e devoluções por parceiro', 'formato' => 'PDF, Excel', 'ultima' => '2026-01-27 20:05'],
-        ];
+        $logs = $this->db->query(
+            "SELECT rl.id, rl.nome, rl.formato, rl.filtros, rl.gerado_em, u.nome AS usuario
+             FROM " . Database::table('relatorios_log') . " rl
+             LEFT JOIN " . Database::table('usuarios') . " u ON u.id = rl.usuario_id
+             ORDER BY rl.gerado_em DESC
+             LIMIT 50"
+        )->fetchAll(PDO::FETCH_ASSOC);
 
         $filtros = [
             'periodo' => 'Últimos 30 dias',
-            'parceiro' => 'Todos',
-            'produto' => 'Todos',
-            'saida' => 'PDF',
+            'saida' => 'Todos',
         ];
 
         $this->layout('layouts/painel', 'admin/relatorios/index', [
-            'relatorios' => $relatorios,
+            'logs' => $logs,
             'filtros' => $filtros,
         ]);
     }

@@ -155,6 +155,38 @@
         </div>
     </div>
 
+    <!-- Atalhos rápidos -->
+    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+        <a href="/admin/usuarios" class="p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+            <div>
+                <p class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Usuários</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">Gerenciar perfis</p>
+            </div>
+            <span class="icon-badge"><i data-lucide="users" class="w-5 h-5"></i></span>
+        </a>
+        <a href="/admin/movimentacoes" class="p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+            <div>
+                <p class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Movimentações</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">Fluxo de estoque</p>
+            </div>
+            <span class="icon-badge"><i data-lucide="arrows-left-right" class="w-5 h-5"></i></span>
+        </a>
+        <a href="/admin/consignado" class="p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+            <div>
+                <p class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Parceiros</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">Consignado</p>
+            </div>
+            <span class="icon-badge"><i data-lucide="handshake" class="w-5 h-5"></i></span>
+        </a>
+        <a href="/admin/auditoria" class="p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
+            <div>
+                <p class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Auditoria</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">Conferências</p>
+            </div>
+            <span class="icon-badge"><i data-lucide="check-circle" class="w-5 h-5"></i></span>
+        </a>
+    </div>
+
     <!-- KPIs -->
     <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-5">
         <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">

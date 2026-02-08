@@ -37,6 +37,7 @@ class PainelController extends Controller
             'admin' => 0,
             'colaborador' => 0,
             'cliente' => 0,
+            'parceiro' => 0,
         ];
         foreach ($rolesRaw as $r) {
             $role = $r['role'] ?? '';
@@ -139,6 +140,26 @@ class PainelController extends Controller
             // fallback silencioso se não conseguir ler sessões
         }
 
+        // Estatísticas adicionais
+        $driver = $pdo->getAttribute(\PDO::ATTR_DRIVER_NAME);
+        $dateFilterMov = $driver === 'mysql'
+            ? "datahora >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)"
+            : "date(datahora) >= date('now','-30 day')";
+        $movsStmt = $pdo->query("SELECT COUNT(*) AS total FROM " . Database::table('movimentacoes') . " WHERE {$dateFilterMov}");
+        $movs30 = (int)($movsStmt->fetch(\PDO::FETCH_ASSOC)['total'] ?? 0);
+
+        $consigStmt = $pdo->query("SELECT COALESCE(SUM(estoque),0) AS itens, COALESCE(SUM(CASE WHEN estoque <= minimo THEN 1 ELSE 0 END),0) AS alertas FROM " . Database::table('consignado_produtos'));
+        $consigRow = $consigStmt->fetch(\PDO::FETCH_ASSOC) ?: ['itens' => 0, 'alertas' => 0];
+
+        $audPendStmt = $pdo->query("SELECT COUNT(*) AS total FROM " . Database::table('auditorias') . " WHERE status = 'pendente'");
+        $audPend = (int)($audPendStmt->fetch(\PDO::FETCH_ASSOC)['total'] ?? 0);
+
+        $dateFilterRel = $driver === 'mysql'
+            ? "gerado_em >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)"
+            : "date(gerado_em) >= date('now','-30 day')";
+        $relStmt = $pdo->query("SELECT COUNT(*) AS total FROM " . Database::table('relatorios_log') . " WHERE {$dateFilterRel}");
+        $rel30 = (int)($relStmt->fetch(\PDO::FETCH_ASSOC)['total'] ?? 0);
+
         $stats = [
             'totalUsuarios' => (int)($counts['total'] ?? 0),
             'ativos' => (int)($counts['ativos'] ?? 0),
@@ -150,6 +171,11 @@ class PainelController extends Controller
             'settings' => $settingsRow,
             'logs' => $logLines,
             'online' => $onlineUsers,
+            'movs30' => $movs30,
+            'consigItens' => (int)($consigRow['itens'] ?? 0),
+            'consigAlertas' => (int)($consigRow['alertas'] ?? 0),
+            'audPend' => $audPend,
+            'rel30' => $rel30,
         ];
 
         $this->layout('layouts/painel', 'admin/painel/index', [

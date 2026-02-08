@@ -31,10 +31,10 @@
                     <?= htmlspecialchars($parceiro['documento'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · <?= htmlspecialchars($parceiro['cidade'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                 </p>
                 <div class="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400">
-                    <span class="inline-flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i><?= htmlspecialchars($parceiro['contato'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                    <span class="inline-flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i><?= htmlspecialchars($parceiro['contato'] ?: ($parceiro['user_nome'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                     <span class="inline-flex items-center gap-1"><i data-lucide="phone" class="w-4 h-4"></i><?= htmlspecialchars($parceiro['telefone'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
-                    <span class="inline-flex items-center gap-1"><i data-lucide="mail" class="w-4 h-4"></i><?= htmlspecialchars($parceiro['email'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
-                    <span class="inline-flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> Atualizado <?= htmlspecialchars($parceiro['atualizado'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                    <span class="inline-flex items-center gap-1"><i data-lucide="mail" class="w-4 h-4"></i><?= htmlspecialchars($parceiro['email'] ?: ($parceiro['user_email'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                    <span class="inline-flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> Atualizado <?= htmlspecialchars($parceiro['atualizado_em'] ?? $parceiro['updated_at'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">
@@ -44,7 +44,7 @@
                 </a>
                 <a href="/admin/parceiros/<?= (int)($parceiro['id'] ?? 0) ?>/relatorio" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     <i data-lucide="file-text" class="w-4 h-4"></i>
-                    Relatório Demo
+                    Relatório
                 </a>
                 <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
                     <i data-lucide="send" class="w-4 h-4"></i>

@@ -22,17 +22,18 @@
                     Produtos
                 </div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Catálogo</h1>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Admin / Colaborador / Cliente</p>
                 <p class="text-sm text-slate-500 dark:text-slate-400">Visualize estoque, consignado e níveis mínimos.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="/admin/produtos/1/ver" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="eye" class="w-4 h-4"></i>
-                    Produto Demo
+                <a href="/admin/produtos" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
+                    Atualizar lista
                 </a>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
+                <a href="/admin/produtos/novo" class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     Novo produto
-                </button>
+                </a>
             </div>
         </div>
     </header>
@@ -91,7 +92,7 @@
                         </span>
                     </div>
                     <p class="text-xs text-gray-500 dark:text-gray-400">SKU <?= htmlspecialchars($prod['sku'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                    <p class="text-xs text-gray-600 dark:text-gray-300 font-semibold"><?= htmlspecialchars($prod['preco'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                    <p class="text-xs text-gray-600 dark:text-gray-300 font-semibold">R$ <?= htmlspecialchars(number_format((float)($prod['preco'] ?? 0), 2, ',', '.'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                 </div>
                 <span class="inline-flex items-center gap-1 text-[11px] px-2 py-[3px] rounded-full border <?= $statusColor ?>">
                     <i data-lucide="dot" class="w-3 h-3"></i>
@@ -116,9 +117,20 @@
 
             <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
                 <span class="inline-flex items-center gap-1"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Repor em breve</span>
-                <div class="flex gap-1">
-                    <button class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs">Editar</button>
-                    <button class="px-3 py-1 rounded-lg bg-[var(--primary-500)] text-white hover:bg-[var(--primary-600)] text-xs">Transferir</button>
+                <div class="flex gap-1 items-center">
+                    <a href="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/ver" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs">Ver</a>
+                    <a href="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/editar" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs">Editar</a>
+                    <form action="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/toggle" method="POST" class="inline">
+                        <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
+                        <?php $ativo = strtolower($prod['status'] ?? 'ativo') !== 'inativo'; ?>
+                        <button type="submit" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-xs <?= $ativo ? 'text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/40' : 'text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/40' ?>">
+                            <?= $ativo ? 'Desativar' : 'Ativar' ?>
+                        </button>
+                    </form>
+                    <form action="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/excluir" method="POST" class="inline" onsubmit="return confirm('Excluir produto?');">
+                        <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
+                        <button type="submit" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/40 text-xs">Excluir</button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -34,14 +34,14 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     Voltar
                 </a>
-                <button class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                    Exportar
-                </button>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
+                <a href="#transferir" class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-stone-700 px-4 py-2 text-sm font-semibold text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
                     <i data-lucide="send" class="w-4 h-4"></i>
                     Transferir
-                </button>
+                </a>
+                <a href="#devolver" class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-stone-700 px-4 py-2 text-sm font-semibold text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+                    <i data-lucide="undo" class="w-4 h-4"></i>
+                    Devolver
+                </a>
             </div>
         </div>
     </header>
@@ -70,6 +70,86 @@
     </div>
 
     <div class="space-y-4">
+        <!-- Ações rápidas -->
+        <div class="grid gap-4 md:grid-cols-2" id="transferir">
+            <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Transferir para parceiro</h3>
+                    <span class="text-[11px] text-gray-500 dark:text-gray-400">Loja → <?= htmlspecialchars($parceiro['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                </div>
+                <form action="/admin/consignado/transferir" method="POST" class="space-y-3">
+                    <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
+                    <input type="hidden" name="parceiro_id" value="<?= (int)($parceiro['id'] ?? 0) ?>">
+                    <div class="grid gap-3 md:grid-cols-2">
+                        <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Produto</span>
+                            <select name="produto_id" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                                <option value="">Selecione</option>
+                                <?php foreach ($produtosLoja as $p): ?>
+                                    <option value="<?= (int)($p['id'] ?? 0) ?>"><?= htmlspecialchars($p['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> (<?= htmlspecialchars($p['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>)</option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Quantidade</span>
+                            <input type="number" name="quantidade" min="1" value="1" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                        </label>
+                    </div>
+                    <div class="grid gap-3 md:grid-cols-3">
+                        <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Lote</span>
+                            <input type="text" name="lote" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                        </label>
+                        <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">NF</span>
+                            <input type="text" name="nf" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                        </label>
+                        <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Prazo devolução</span>
+                            <input type="text" name="prazo_dev" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm" placeholder="Opcional">
+                        </label>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-sm font-semibold hover:bg-stone-800">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                            Transferir
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm space-y-3" id="devolver">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Registrar devolução</h3>
+                    <span class="text-[11px] text-gray-500 dark:text-gray-400">Parceiro → loja</span>
+                </div>
+                <form action="/admin/consignado/devolver" method="POST" class="space-y-3">
+                    <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
+                    <input type="hidden" name="parceiro_id" value="<?= (int)($parceiro['id'] ?? 0) ?>">
+                    <div class="grid gap-3 md:grid-cols-2">
+                        <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Produto</span>
+                            <select name="produto_id" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                                <option value="">Selecione</option>
+                                <?php foreach ($produtos as $p): ?>
+                                    <option value="<?= htmlspecialchars($p['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"><?= htmlspecialchars($p['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> (<?= htmlspecialchars($p['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>)</option>
+                                <?php endforeach; ?>
+                            </select>
+                        </label>
+                        <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
+                            <span class="font-semibold">Quantidade</span>
+                            <input type="number" name="quantidade" min="1" value="1" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                        </label>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button type="submit" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-sm font-semibold hover:bg-stone-800">
+                            <i data-lucide="undo" class="w-4 h-4"></i>
+                            Devolver
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Produtos consignados -->
         <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
             <div class="flex items-center justify-between mb-3">
@@ -99,13 +179,13 @@
                                 <td class="px-3 py-2 font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($item['produto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
                                 <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['sku'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
                                 <td class="px-3 py-2 text-gray-600 dark:text-gray-300">
-                                    <?= htmlspecialchars($item['lote'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · <?= htmlspecialchars($item['nf'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                                    <?= htmlspecialchars($item['lote'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · <?= htmlspecialchars($item['nf'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                                 </td>
                                 <td class="px-3 py-2 text-gray-900 dark:text-white"><?= (int)($item['estoque'] ?? 0) ?></td>
                                 <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= (int)($item['min'] ?? 0) ?></td>
                                 <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= (int)($item['vendido_mes'] ?? 0) ?></td>
                                 <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= (int)($item['devolucao'] ?? 0) ?></td>
-                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['prazo_dev'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['prazo_dev'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

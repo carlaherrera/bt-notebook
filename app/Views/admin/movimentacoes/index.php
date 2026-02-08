@@ -25,13 +25,28 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400">Entradas, transferências, vendas, devoluções e ajustes.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <button class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
-                    Ajustar filtros
-                </button>
+                <form method="GET" action="/admin/movimentacoes" class="flex flex-wrap gap-2 items-center">
+                    <input type="hidden" name="dias" value="<?= (int)($filtros['dias'] ?? 30) ?>" />
+                    <input type="text" name="tipo" value="<?= htmlspecialchars($filtros['tipo'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="tipo" class="w-28 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                    <input type="text" name="parceiro" value="<?= htmlspecialchars($filtros['parceiro'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="parceiro" class="w-32 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                    <input type="text" name="produto" value="<?= htmlspecialchars($filtros['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="produto" class="w-32 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                    <select name="dias" class="w-28 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                        <?php foreach ([7, 30, 90, 180] as $d): ?>
+                            <option value="<?= $d ?>" <?= (int)($filtros['dias'] ?? 30) === $d ? 'selected' : '' ?>>Últimos <?= $d ?>d</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                        Filtrar
+                    </button>
+                    <a href="/admin/movimentacoes" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                        Limpar
+                    </a>
+                </form>
                 <a href="/admin/movimentacoes/nova" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     <i data-lucide="plus" class="w-4 h-4"></i>
-                    Nova movimentação (demo)
+                    Nova movimentação
                 </a>
                 <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
                     <i data-lucide="download" class="w-4 h-4"></i>
@@ -109,12 +124,23 @@
                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     <?php foreach ($linhas as $linha): ?>
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/60">
-                            <td class="px-3 py-2 font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($linha['tipo'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['descricao'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['parceiro'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['produto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($linha['tipo'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['descricao'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['parceiro'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
                             <td class="px-3 py-2 text-gray-900 dark:text-white"><?= (int)($linha['quantidade'] ?? 0) ?></td>
-                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['data'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($linha['data'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-right text-xs">
+                                <?php if (($linha['origem'] ?? '') === 'geral' && isset($linha['id'])): ?>
+                                    <a href="/admin/movimentacoes/<?= (int)$linha['id'] ?>/editar" class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Editar</a>
+                                    <form action="/admin/movimentacoes/<?= (int)$linha['id'] ?>/excluir" method="POST" class="inline">
+                                        <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
+                                        <button type="submit" class="px-2 py-1 rounded border border-gray-200 dark:border-gray-700 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/40">Excluir</button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="text-gray-400 dark:text-gray-600">Consignado</span>
+                                <?php endif; ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

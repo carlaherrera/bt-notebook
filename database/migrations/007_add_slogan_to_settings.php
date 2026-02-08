@@ -20,4 +20,8 @@ if ($driver === 'mysql') {
     $sql = "ALTER TABLE {$table} ADD COLUMN slogan TEXT NULL";
 }
 
-$pdo->exec($sql);
+try {
+    $pdo->exec($sql);
+} catch (\Throwable $e) {
+    // Ignora erro se a coluna já existir
+}

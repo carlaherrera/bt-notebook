@@ -25,14 +25,14 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400">Gestão de academias e personals com estoque consignado.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="/admin/parceiros/1/ver" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="eye" class="w-4 h-4"></i>
-                    Demo parceiro
+                <a href="/admin/parceiros" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
+                    Atualizar lista
                 </a>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
+                <a href="/admin/parceiros/novo" class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     Novo parceiro
-                </button>
+                </a>
             </div>
         </div>
     </header>
@@ -75,9 +75,6 @@
             </div>
             <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Todos</button>
             <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover-bg-gray-800">Academias</button>
-            <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover-bg-gray-800">Personais</button>
-            <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover-bg-gray-800">Ativos</button>
-            <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover-bg-gray-800">Inativos</button>
         </div>
 
         <div class="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
@@ -111,15 +108,15 @@
                     <div class="grid grid-cols-3 gap-3 text-center text-xs">
                         <div class="rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/60 p-3">
                             <p class="text-[11px] text-gray-500 dark:text-gray-400">Itens</p>
-                            <p class="text-lg font-bold text-gray-900 dark:text-white"><?= (int)($p['estoque']['itens'] ?? 0) ?></p>
+                            <p class="text-lg font-bold text-gray-900 dark:text-white"><?= (int)($p['itens'] ?? 0) ?></p>
                         </div>
                         <div class="rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/60 p-3">
                             <p class="text-[11px] text-gray-500 dark:text-gray-400">Baixo</p>
-                            <p class="text-lg font-bold text-amber-600"><?= (int)($p['estoque']['baixo'] ?? 0) ?></p>
+                            <p class="text-lg font-bold text-amber-600"><?= (int)($p['baixo'] ?? 0) ?></p>
                         </div>
                         <div class="rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/60 p-3">
                             <p class="text-[11px] text-gray-500 dark:text-gray-400">Devolução</p>
-                            <p class="text-lg font-bold text-gray-900 dark:text-white"><?= (int)($p['estoque']['devolucao'] ?? 0) ?></p>
+                            <p class="text-lg font-bold text-gray-900 dark:text-white"><?= (int)($p['devolucao'] ?? 0) ?></p>
                         </div>
                     </div>
 
@@ -130,14 +127,14 @@
                         </div>
                         <div class="inline-flex items-center gap-1">
                             <i data-lucide="wallet" class="w-4 h-4"></i>
-                            Ticket: <span class="font-semibold text-gray-800 dark:text-gray-100 ml-1"><?= htmlspecialchars($p['ticket'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                            Ticket: <span class="font-semibold text-gray-800 dark:text-gray-100 ml-1"><?= htmlspecialchars(number_format((float)($p['ticket_medio'] ?? 0), 2, ',', '.'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                         </div>
                     </div>
 
                     <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
-                        <span class="inline-flex items-center gap-1"><i data-lucide="clock-3" class="w-3.5 h-3.5"></i> Atualizado: <?= htmlspecialchars($p['atualizado'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                        <span class="inline-flex items-center gap-1"><i data-lucide="clock-3" class="w-3.5 h-3.5"></i> Atualizado: <?= htmlspecialchars($p['atualizado_em'] ?? $p['updated_at'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                         <div class="flex gap-1">
-                            <button class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Ver detalhes</button>
+                            <a href="/admin/parceiros/<?= (int)($p['id'] ?? 0) ?>/ver" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Ver detalhes</a>
                             <button class="px-3 py-1 rounded-lg bg-[var(--primary-500)] text-white hover:bg-[var(--primary-600)]">Transferir</button>
                         </div>
                     </div>

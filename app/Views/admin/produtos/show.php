@@ -39,14 +39,25 @@
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     Voltar
                 </a>
-                <button class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                    Exportar ficha
-                </button>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
-                    <i data-lucide="send" class="w-4 h-4"></i>
-                    Transferir
-                </button>
+                <a href="/admin/produtos/<?= (int)($produto['id'] ?? 0) ?>/editar" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                    Editar
+                </a>
+                <form action="/admin/produtos/<?= (int)($produto['id'] ?? 0) ?>/toggle" method="POST" class="inline">
+                    <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
+                    <?php $ativo = strtolower($produto['status'] ?? 'ativo') !== 'inativo'; ?>
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold <?= $ativo ? 'text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/40' : 'text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/40' ?> transition-colors">
+                        <i data-lucide="power" class="w-4 h-4"></i>
+                        <?= $ativo ? 'Desativar' : 'Ativar' ?>
+                    </button>
+                </form>
+                <form action="/admin/produtos/<?= (int)($produto['id'] ?? 0) ?>/excluir" method="POST" class="inline" onsubmit="return confirm('Excluir produto?');">
+                    <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
+                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/40 transition-colors">
+                        <i data-lucide="trash" class="w-4 h-4"></i>
+                        Excluir
+                    </button>
+                </form>
             </div>
         </div>
     </header>
@@ -83,11 +94,11 @@
                 <span class="text-[11px] text-gray-500 dark:text-gray-400">Últimos 30 dias</span>
             </div>
             <div class="space-y-2">
-                <?php foreach ($parceirosTop as $p): ?>
+                <?php foreach ($parceirosTop ?? [] as $p): ?>
                     <div class="p-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-900/60 flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($p['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                            <p class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($p['cidade'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($p['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($p['cidade'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                         </div>
                         <div class="text-right text-sm font-semibold text-gray-900 dark:text-white">
                             <?= (int)($p['vendido'] ?? 0) ?>
@@ -95,6 +106,9 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
+                <?php if (empty($parceirosTop ?? [])): ?>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Sem vendas registradas.</p>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -105,7 +119,7 @@
                 <button class="px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs">Exportar</button>
             </div>
             <div class="space-y-2 max-h-72 overflow-auto">
-                <?php foreach ($movimentacoes as $mov): ?>
+                <?php foreach ($movimentacoes ?? [] as $mov): ?>
                     <div class="p-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-900/60 flex items-center justify-between">
                         <div>
                             <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($mov['tipo'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
@@ -118,6 +132,9 @@
                         </div>
                     </div>
                 <?php endforeach; ?>
+                <?php if (empty($movimentacoes ?? [])): ?>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Sem movimentações registradas.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>

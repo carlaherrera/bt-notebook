@@ -24,15 +24,20 @@
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Estoque consignado por parceiro</h1>
                 <p class="text-sm text-slate-500 dark:text-slate-400">Visão consolidada de itens enviados, alertas e devoluções.</p>
             </div>
+            <?php $firstPartnerId = (int)($parceiros[0]['id'] ?? 0); ?>
             <div class="flex flex-wrap gap-2">
-                <a href="/admin/consignado/parceiro/1/ver" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="eye" class="w-4 h-4"></i>
-                    Ver demo
+                <a href="/admin/consignado" class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-stone-700 px-4 py-2 text-sm font-semibold text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors">
+                    <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
+                    Atualizar lista
                 </a>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
-                    <i data-lucide="send" class="w-4 h-4"></i>
-                    Transferir estoque
-                </button>
+                <?php if ($firstPartnerId): ?>
+                    <a href="/admin/consignado/parceiro/<?= $firstPartnerId ?>/ver" class="inline-flex items-center gap-2 rounded-xl bg-stone-900 text-white px-4 py-2 text-sm font-semibold hover:bg-stone-800 transition-colors">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                        Transferir estoque
+                    </a>
+                <?php else: ?>
+                    <span class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-stone-700 px-4 py-2 text-sm font-semibold text-stone-400 dark:text-stone-500">Sem parceiros</span>
+                <?php endif; ?>
             </div>
         </div>
     </header>
@@ -97,9 +102,9 @@
                             <td class="px-3 py-2 text-gray-900 dark:text-white"><?= (int)($p['transferencias_mes'] ?? 0) ?></td>
                     <td class="px-3 py-2">
                         <div class="flex gap-1 text-xs">
-                            <a href="/admin/consignado/parceiro/<?= $id ?>/ver" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Ver</a>
-                            <button class="px-3 py-1 rounded-lg bg-[var(--primary-500)] text-white hover:bg-[var(--primary-600)]">Transferir</button>
-                            <button class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Devolver</button>
+                            <a href="/admin/consignado/parceiro/<?= $id ?>/ver" class="px-3 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">Ver</a>
+                            <a href="/admin/consignado/parceiro/<?= $id ?>/ver#transferir" class="px-3 py-1 rounded-lg bg-stone-900 text-white hover:bg-stone-800">Transferir</a>
+                            <a href="/admin/consignado/parceiro/<?= $id ?>/ver#devolver" class="px-3 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">Devolver</a>
                         </div>
                     </td>
                 </tr>

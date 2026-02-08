@@ -12,6 +12,16 @@ if (!defined('BASE_PATH')) {
 if (session_status() === PHP_SESSION_NONE) {
     $sessionLifetime = 60 * 60 * 24 * 3; // 3 dias
     $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+
+    // Garante diretório de sessão válido (evita erro em C:/Windows/Temp)
+    $sessionPath = BASE_PATH . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'sessions';
+    if (!is_dir($sessionPath)) {
+        @mkdir($sessionPath, 0777, true);
+    }
+    if (is_dir($sessionPath) && is_writable($sessionPath)) {
+        ini_set('session.save_path', $sessionPath);
+    }
+
     ini_set('session.gc_maxlifetime', (string) $sessionLifetime);
     session_set_cookie_params([
         'lifetime' => $sessionLifetime,
