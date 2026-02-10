@@ -10,14 +10,21 @@ use App\Core\Database;
 // Pasta das migrations
 $migrationsPath = __DIR__ . '/database/migrations';
 
-// Lista todos os arquivos
-$files = scandir($migrationsPath);
+// Lista e ordena todos os arquivos php
+$files = array_filter(scandir($migrationsPath), static function ($file) {
+    return substr($file, -4) === '.php';
+});
+sort($files, SORT_NATURAL);
 
-// Executa cada migration
+// Executa cada migration com captura de erros
 foreach ($files as $file) {
-    if (substr($file, -4) === '.php') {
-        require $migrationsPath . '/' . $file;
+    $path = $migrationsPath . '/' . $file;
+    try {
+        require $path;
         echo "Migration executada: {$file}\n";
+    } catch (Throwable $e) {
+        fwrite(STDERR, "Erro na migration {$file}: " . $e->getMessage() . "\n");
+        exit(1);
     }
 }
 

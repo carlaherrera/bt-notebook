@@ -59,7 +59,7 @@ class ParceiroRepository
     public function produtos(int $parceiroId): array
     {
         $stmt = $this->db->prepare(
-            "SELECT produto, sku, categoria, lote, nf, estoque, minimo AS min, vendido_mes, devolucao, prazo_dev
+            "SELECT produto, sku, lote, nf, estoque, min, vendido_mes, devolucao, prazo_dev
              FROM " . Database::table('consignado_produtos') . "
              WHERE parceiro_id = :id"
         );
@@ -70,10 +70,10 @@ class ParceiroRepository
     public function movimentacoesConsignado(int $parceiroId, int $limit = 50): array
     {
         $stmt = $this->db->prepare(
-            "SELECT tipo, descricao, quantidade, data, usuario, valor
+            "SELECT tipo, descricao, quantidade, data_mov AS data, created_at
              FROM " . Database::table('consignado_movimentacoes') . "
              WHERE parceiro_id = :id
-             ORDER BY data DESC
+             ORDER BY data_mov DESC
              LIMIT :limit"
         );
         $stmt->bindValue(':id', $parceiroId, PDO::PARAM_INT);

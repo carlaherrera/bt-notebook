@@ -36,4 +36,14 @@ class Logger
     {
         self::log('ERROR', $message, $context);
     }
+
+    public static function debug(string $message, array $context = []): void
+    {
+        self::log('DEBUG', $message, $context);
+    }
+
+    public static function warning(string $message, array $context = []): void
+    {
+        self::log('WARNING', $message, $context);
+    }
 }

@@ -204,12 +204,17 @@ class ParceirosController extends Controller
     public function show($id): void
     {
         $id = (int)$id;
+        \App\Core\Logger::debug('ParceirosController::show iniciado', ['id' => $id]);
+        
         $parceiro = $this->repo->findComResumo($id);
 
         if (!$parceiro) {
+            \App\Core\Logger::warning('Parceiro não encontrado', ['id' => $id]);
             http_response_code(404);
             exit('Parceiro não encontrado');
         }
+        
+        \App\Core\Logger::debug('Parceiro encontrado', ['id' => $id, 'parceiro' => $parceiro['nome'] ?? 'sem nome']);
 
         $consignado = $this->repo->produtos($id);
         $movimentacoes = $this->repo->movimentacoesConsignado($id, 100);

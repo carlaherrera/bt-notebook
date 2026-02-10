@@ -35,14 +35,25 @@ class ConsignadoController extends Controller
     public function parceiro($id): void
     {
         $id = (int)$id;
+        \App\Core\Logger::debug('ConsignadoController::parceiro iniciado', ['id' => $id]);
+        
         $parceiro = $this->repo->findComResumo($id);
         if (!$parceiro) {
+            \App\Core\Logger::warning('Parceiro não encontrado em consignado', ['id' => $id]);
             http_response_code(404);
             exit('Parceiro não encontrado');
         }
+        
+        \App\Core\Logger::debug('Parceiro encontrado em consignado', ['id' => $id]);
         $produtos = $this->repo->produtos($id);
         $movimentacoes = $this->repo->movimentacoesConsignado($id, 100);
         $produtosLoja = $this->carregarProdutosLoja();
+
+        \App\Core\Logger::debug('Dados carregados para consignado', [
+            'id' => $id,
+            'produtos_count' => count($produtos),
+            'movimentacoes_count' => count($movimentacoes),
+        ]);
 
         $this->layout('layouts/painel', 'admin/consignado/show', [
             'parceiro' => $parceiro,
@@ -208,8 +219,8 @@ class ConsignadoController extends Controller
     private function registrarMov(int $parceiroId, string $tipo, string $descricao, string $produto, int $quantidade): void
     {
         $stmt = $this->db->prepare(
-            "INSERT INTO " . Database::table('consignado_movimentacoes') . " (parceiro_id, tipo, descricao, produto, quantidade, data, usuario)
-             VALUES (:parceiro_id, :tipo, :descricao, :produto, :quantidade, :data, :usuario)"
+            "INSERT INTO " . Database::table('consignado_movimentacoes') . " (parceiro_id, tipo, descricao, produto, quantidade, data_mov, created_at)
+             VALUES (:parceiro_id, :tipo, :descricao, :produto, :quantidade, :data_mov, :created_at)"
         );
         $stmt->execute([
             'parceiro_id' => $parceiroId,
@@ -217,8 +228,8 @@ class ConsignadoController extends Controller
             'descricao' => $descricao,
             'produto' => $produto,
             'quantidade' => $quantidade,
-            'data' => date('Y-m-d H:i:s'),
-            'usuario' => $_SESSION['user']['nome'] ?? 'Sistema',
+            'data_mov' => date('Y-m-d'),
+            'created_at' => date('Y-m-d H:i:s'),
         ]);
     }
 

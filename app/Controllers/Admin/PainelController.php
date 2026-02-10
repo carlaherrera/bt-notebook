@@ -148,7 +148,7 @@ class PainelController extends Controller
         $movsStmt = $pdo->query("SELECT COUNT(*) AS total FROM " . Database::table('movimentacoes') . " WHERE {$dateFilterMov}");
         $movs30 = (int)($movsStmt->fetch(\PDO::FETCH_ASSOC)['total'] ?? 0);
 
-        $consigStmt = $pdo->query("SELECT COALESCE(SUM(estoque),0) AS itens, COALESCE(SUM(CASE WHEN estoque <= minimo THEN 1 ELSE 0 END),0) AS alertas FROM " . Database::table('consignado_produtos'));
+        $consigStmt = $pdo->query("SELECT COALESCE(SUM(estoque),0) AS itens, COALESCE(SUM(CASE WHEN estoque <= min THEN 1 ELSE 0 END),0) AS alertas FROM " . Database::table('consignado_produtos'));
         $consigRow = $consigStmt->fetch(\PDO::FETCH_ASSOC) ?: ['itens' => 0, 'alertas' => 0];
 
         $audPendStmt = $pdo->query("SELECT COUNT(*) AS total FROM " . Database::table('auditorias') . " WHERE status = 'pendente'");

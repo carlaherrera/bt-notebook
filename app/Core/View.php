@@ -47,17 +47,33 @@ class View
 
         if (!file_exists($layoutFile) || !file_exists($viewFile)) {
             http_response_code(500);
-            error_log('Layout ou View não encontrados: ' . $layoutFile . ' | ' . $viewFile);
+            $errorMsg = 'Layout ou View não encontrados: ' . $layoutFile . ' | ' . $viewFile;
+            error_log($errorMsg);
+            Logger::error('View layout não encontrado', ['layout' => $layoutFile, 'view' => $viewFile]);
             echo "Erro: Layout ou View não encontrados";
             return;
         }
 
         // Usa buffer para injetar view dentro do layout
-        ob_start();
-        require $viewFile;
-        $content = ob_get_clean();
+        try {
+            ob_start();
+            require $viewFile;
+            $content = ob_get_clean();
 
-        require $layoutFile;
+            require $layoutFile;
+        } catch (\Throwable $e) {
+            ob_end_clean();
+            http_response_code(500);
+            Logger::error('Erro ao renderizar view', [
+                'layout' => $layoutFile,
+                'view' => $viewFile,
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+            echo "Erro ao renderizar página";
+        }
     }
 
     /**

@@ -79,11 +79,16 @@ class UsuariosController extends Controller
     public function show($id): void
     {
         $id = (int) $id;
+        \App\Core\Logger::debug('UsuariosController::show iniciado', ['id' => $id]);
+        
         $usuario = $this->users->find($id);
         if (!$usuario) {
+            \App\Core\Logger::warning('Usuário não encontrado', ['id' => $id]);
             http_response_code(404);
             exit('Usuário não encontrado');
         }
+        
+        \App\Core\Logger::debug('Usuário encontrado', ['id' => $id, 'usuario' => $usuario->nome ?? 'sem nome']);
         $this->layout('layouts/painel', 'admin/usuarios/ver', ['usuario' => $usuario]);
     }
 

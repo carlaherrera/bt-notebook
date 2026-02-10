@@ -158,15 +158,31 @@ class Router
 
             // Instancia o Controller
             if (!class_exists($controllerClass)) {
+                Logger::error("Controller não encontrado", ['controller' => $controllerClass, 'uri' => $uri]);
                 ErrorPage::render(404, "Controller não encontrado");
                 return;
             }
 
-            $controller = new $controllerClass();
+            try {
+                $controller = new $controllerClass();
 
-            // Executa o método no Controller
-            if (method_exists($controller, $methodName)) {
-                $controller->{$methodName}(...$params);
+                // Executa o método no Controller
+                if (method_exists($controller, $methodName)) {
+                    Logger::debug("Executando controller", ['controller' => $controllerClass, 'method' => $methodName, 'uri' => $uri, 'params' => $params]);
+                    $controller->{$methodName}(...$params);
+                    return;
+                }
+            } catch (\Throwable $e) {
+                Logger::error("Erro ao executar controller", [
+                    'controller' => $controllerClass,
+                    'method' => $methodName,
+                    'uri' => $uri,
+                    'error' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                    'trace' => $e->getTraceAsString(),
+                ]);
+                ErrorPage::render(500, "Erro ao processar requisição");
                 return;
             }
         }
