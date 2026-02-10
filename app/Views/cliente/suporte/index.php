@@ -1,5 +1,6 @@
 <?php
 // /app/Views/cliente/suporte/index.php
+use App\Core\Security;
 ?>
 
 <section class="space-y-6">
@@ -31,9 +32,9 @@
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-sm font-semibold text-stone-900 dark:text-white">Meus tickets</h3>
                 <div class="flex gap-2 text-xs">
-                    <button class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Todos</button>
-                    <button class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Abertos</button>
-                    <button class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Resolvidos</button>
+                    <a href="/cliente/suporte" class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Todos</a>
+                    <a href="/cliente/suporte?status=aberto" class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Abertos</a>
+                    <a href="/cliente/suporte?status=resolvido" class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Resolvidos</a>
                 </div>
             </div>
 
@@ -57,20 +58,17 @@
                                     </span>
                                 </div>
                                 <p class="text-sm text-stone-700 dark:text-stone-200 font-semibold"><?= htmlspecialchars($ticket['assunto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                                <p class="text-xs text-stone-600 dark:text-stone-400">Atualizado: <?= htmlspecialchars($ticket['atualizado'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                                <?php $dt = !empty($ticket['created_at']) ? date('d/m/Y H:i', strtotime($ticket['created_at'])) : ''; ?>
+                                <p class="text-xs text-stone-600 dark:text-stone-400">Criado: <?= htmlspecialchars($dt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                             </div>
                             <div class="text-right text-xs text-stone-500 dark:text-stone-400">
                                 Prioridade: <?= htmlspecialchars($ticket['prioridade'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                             </div>
                         </div>
                         <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                            <a href="#" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
+                            <a href="/cliente/suporte/<?= (int)$ticket['id'] ?>" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
                                 <i data-lucide="message-square" class="w-4 h-4"></i>
                                 Ver conversa
-                            </a>
-                            <a href="#" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
-                                <i data-lucide="paperclip" class="w-4 h-4"></i>
-                                Enviar anexo
                             </a>
                         </div>
                     </div>
@@ -83,29 +81,30 @@
                 <h3 class="text-sm font-semibold text-stone-900 dark:text-white">Abrir chamado</h3>
                 <span class="text-[11px] text-stone-500 dark:text-stone-400">Resposta média: 1h</span>
             </div>
-            <form class="space-y-3">
+            <form class="space-y-3" method="POST" action="/cliente/suporte">
+                <input type="hidden" name="_csrf" value="<?= Security::csrfToken() ?>">
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">Assunto</span>
-                    <input type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Ex: Atraso na entrega">
+                    <input name="assunto" type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Ex: Atraso na entrega" required>
                 </label>
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">Categoria</span>
-                    <select class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm">
-                        <option>Entrega</option>
-                        <option>Pagamento</option>
-                        <option>Troca/Devolução</option>
-                        <option>Outros</option>
+                    <select name="categoria" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" required>
+                        <option value="Entrega">Entrega</option>
+                        <option value="Pagamento">Pagamento</option>
+                        <option value="Troca/Devolução">Troca/Devolução</option>
+                        <option value="Outros">Outros</option>
                     </select>
                 </label>
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">Descrição</span>
-                    <textarea rows="4" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Detalhe o que aconteceu"></textarea>
+                    <textarea name="mensagem" rows="4" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Detalhe o que aconteceu" required></textarea>
                 </label>
-                <button type="button" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-sm font-semibold hover:bg-stone-800">
+                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-sm font-semibold hover:bg-stone-800">
                     <i data-lucide="send" class="w-4 h-4"></i>
                     Enviar chamado
                 </button>
-                <p class="text-xs text-stone-500 dark:text-stone-400">Dados mockados para layout; integrar API quando disponível.</p>
+                <p class="text-xs text-stone-500 dark:text-stone-400">Tickets são criados e vinculados à sua conta.</p>
             </form>
         </div>
     </div>

@@ -65,6 +65,26 @@ use App\Core\Security;
                 </div>
             </div>
 
+            <div class="grid gap-4 md:grid-cols-3">
+                <div class="space-y-2">
+                    <label class="text-sm font-semibold text-slate-600 dark:text-slate-300" for="fabricado_em">Fabricado em</label>
+                    <input id="fabricado_em" name="fabricado_em" type="date" value="<?= htmlspecialchars($produto['fabricado_em'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-50">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-semibold text-slate-600 dark:text-slate-300" for="expira_em">Validade</label>
+                    <input id="expira_em" name="expira_em" type="date" value="<?= htmlspecialchars($produto['expira_em'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-50">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-sm font-semibold text-slate-600 dark:text-slate-300" for="lote">Lote</label>
+                    <input id="lote" name="lote" maxlength="120" value="<?= htmlspecialchars($produto['lote'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-50" placeholder="Identificador do lote">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-600 dark:text-slate-300" for="observacoes">Observações</label>
+                <textarea id="observacoes" name="observacoes" rows="3" class="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-slate-50" placeholder="Cuidados de manuseio, armazenagem, etc."><?= htmlspecialchars($produto['observacoes'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></textarea>
+            </div>
+
             <div class="flex justify-end gap-3">
                 <a href="/admin/produtos" class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-700 dark:text-slate-100 hover:border-[color-mix(in_srgb,var(--primary-color)_40%,white)] hover:text-[color-mix(in_srgb,var(--primary-color)_80%,black_20%)] dark:hover:border-[color-mix(in_srgb,var(--primary-color)_40%,transparent)] shadow-sm">
                     Cancelar

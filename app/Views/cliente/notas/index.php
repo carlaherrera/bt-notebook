@@ -46,14 +46,28 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-stone-100 dark:divide-stone-800">
+                    <?php if (empty($notas)): ?>
+                        <tr>
+                            <td colspan="5" class="px-3 py-4 text-sm text-stone-600 dark:text-stone-300">Nenhuma nota fiscal encontrada.</td>
+                        </tr>
+                    <?php endif; ?>
                     <?php foreach ($notas as $nota): ?>
+                        <?php $dataFmt = !empty($nota['data_emissao']) ? date('d/m/Y', strtotime($nota['data_emissao'])) : ''; ?>
                         <tr class="hover:bg-stone-50 dark:hover:bg-stone-800/60">
-                            <td class="px-3 py-2 font-semibold text-stone-900 dark:text-white"><?= htmlspecialchars($nota['id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                            <td class="px-3 py-2 text-stone-700 dark:text-stone-200"><?= htmlspecialchars($nota['pedido'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                            <td class="px-3 py-2 text-stone-600 dark:text-stone-300"><?= htmlspecialchars($nota['data'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                            <td class="px-3 py-2 text-stone-900 dark:text-white"><?= htmlspecialchars($nota['valor'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                            <td class="px-3 py-2 text-right text-xs">
-                                <a href="<?= htmlspecialchars($nota['link'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
+                            <td class="px-3 py-2 font-semibold text-stone-900 dark:text-white">NFe <?= htmlspecialchars($nota['numero'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-stone-700 dark:text-stone-200">#<?= htmlspecialchars($nota['pedido_id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-stone-600 dark:text-stone-300"><?= htmlspecialchars($dataFmt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                            <td class="px-3 py-2 text-stone-900 dark:text-white">R$ <?= number_format((float)($nota['valor'] ?? 0), 2, ',', '.') ?></td>
+                            <td class="px-3 py-2 text-right text-xs space-x-2">
+                                <a href="/cliente/notas/<?= (int)$nota['id'] ?>" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
+                                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                                    Ver
+                                </a>
+                                <a href="/cliente/notas/<?= (int)$nota['id'] ?>/editar" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
+                                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                                    Editar
+                                </a>
+                                <a href="<?= htmlspecialchars($nota['link_download'] ?? '#', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
                                     <i data-lucide="download" class="w-4 h-4"></i>
                                     Baixar
                                 </a>

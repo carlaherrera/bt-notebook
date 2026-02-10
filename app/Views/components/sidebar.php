@@ -69,7 +69,6 @@ $menus = [
         ['label' => 'Suporte', 'icon' => 'life-buoy', 'href' => '/cliente/suporte', 'match' => '/cliente/suporte'],
         ['label' => 'Perfil', 'icon' => 'user', 'href' => '/cliente/perfil', 'match' => '/cliente/perfil'],
         ['label' => 'Endereços', 'icon' => 'map-pin', 'href' => '/cliente/enderecos', 'match' => '/cliente/enderecos'],
-        ['label' => 'Pagamentos', 'icon' => 'credit-card', 'href' => '/cliente/pagamentos', 'match' => '/cliente/pagamentos'],
         ['label' => 'Notas Fiscais', 'icon' => 'file-text', 'href' => '/cliente/notas', 'match' => '/cliente/notas'],
     ],
 ];

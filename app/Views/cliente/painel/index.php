@@ -27,23 +27,23 @@
     <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
         <div class="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
             <p class="text-xs font-semibold uppercase text-stone-500 dark:text-stone-300">Pedidos</p>
-            <p class="text-2xl font-bold text-stone-900 dark:text-white mt-1">12</p>
-            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Aguardando entrega</p>
+            <p class="text-2xl font-bold text-stone-900 dark:text-white mt-1"><?= (int)($pedidosMetrics['total'] ?? 0) ?></p>
+            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Em andamento: <?= (int)($pedidosMetrics['em_andamento'] ?? 0) ?></p>
         </div>
         <div class="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
             <p class="text-xs font-semibold uppercase text-stone-500 dark:text-stone-300">Entregues</p>
-            <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mt-1">5</p>
-            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Últimos 30 dias</p>
+            <p class="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mt-1"><?= (int)($pedidosMetrics['entregues'] ?? 0) ?></p>
+            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Inclui últimos pedidos</p>
         </div>
         <div class="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
             <p class="text-xs font-semibold uppercase text-stone-500 dark:text-stone-300">Tickets</p>
-            <p class="text-2xl font-bold text-amber-700 dark:text-amber-300 mt-1">2</p>
-            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Em suporte</p>
+            <p class="text-2xl font-bold text-amber-700 dark:text-amber-300 mt-1"><?= (int)($ticketMetrics['tickets_abertos'] ?? 0) ?></p>
+            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Abertos ou em atendimento</p>
         </div>
         <div class="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
-            <p class="text-xs font-semibold uppercase text-stone-500 dark:text-stone-300">Pontos</p>
-            <p class="text-2xl font-bold text-stone-900 dark:text-white mt-1">1.250</p>
-            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Rewards disponíveis</p>
+            <p class="text-xs font-semibold uppercase text-stone-500 dark:text-stone-300">Financeiro</p>
+            <p class="text-2xl font-bold text-stone-900 dark:text-white mt-1"><?= (int)($faturasMetrics['faturas_pendentes'] ?? 0) ?> pend.</p>
+            <p class="text-xs text-stone-500 dark:text-stone-400 mt-1">Notas: <?= (int)($notasMetrics['notas_total'] ?? 0) ?></p>
         </div>
     </div>
 
@@ -57,32 +57,36 @@
             <div class="overflow-auto">
                 <table class="min-w-full text-sm">
                     <thead class="text-xs uppercase text-stone-500 dark:text-stone-400">
-                        <tr>
-                            <th class="px-3 py-2">Pedido</th>
-                            <th class="px-3 py-2">Data</th>
-                            <th class="px-3 py-2">Status</th>
-                            <th class="px-3 py-2">Total</th>
+                        <tr class="bg-stone-50 dark:bg-stone-900/50">
+                            <th class="px-3 py-2 text-left">Pedido</th>
+                            <th class="px-3 py-2 text-left">Data</th>
+                            <th class="px-3 py-2 text-left">Status</th>
+                            <th class="px-3 py-2 text-right">Total</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-stone-100 dark:divide-stone-800">
-                        <tr class="hover:bg-stone-50 dark:hover:bg-stone-800/60">
-                            <td class="px-3 py-2 font-semibold text-stone-900 dark:text-white">#1023</td>
-                            <td class="px-3 py-2 text-stone-600 dark:text-stone-300">08/02/2026</td>
-                            <td class="px-3 py-2 text-amber-700 dark:text-amber-300">Em separação</td>
-                            <td class="px-3 py-2 text-stone-900 dark:text-white">R$ 249,90</td>
-                        </tr>
-                        <tr class="hover:bg-stone-50 dark:hover:bg-stone-800/60">
-                            <td class="px-3 py-2 font-semibold text-stone-900 dark:text-white">#1019</td>
-                            <td class="px-3 py-2 text-stone-600 dark:text-stone-300">05/02/2026</td>
-                            <td class="px-3 py-2 text-emerald-700 dark:text-emerald-300">Entregue</td>
-                            <td class="px-3 py-2 text-stone-900 dark:text-white">R$ 189,00</td>
-                        </tr>
-                        <tr class="hover:bg-stone-50 dark:hover:bg-stone-800/60">
-                            <td class="px-3 py-2 font-semibold text-stone-900 dark:text-white">#1014</td>
-                            <td class="px-3 py-2 text-stone-600 dark:text-stone-300">29/01/2026</td>
-                            <td class="px-3 py-2 text-amber-700 dark:text-amber-300">Em rota</td>
-                            <td class="px-3 py-2 text-stone-900 dark:text-white">R$ 320,00</td>
-                        </tr>
+                        <?php foreach (($pedidosRecentes ?? []) as $pedido): ?>
+                            <?php
+                                $dataFmt = !empty($pedido['created_at']) ? date('d/m/Y', strtotime($pedido['created_at'])) : '';
+                                $status = $pedido['status'] ?? '—';
+                                $statusClass = 'bg-stone-100 text-stone-800 dark:bg-stone-800 dark:text-stone-200';
+                                if ($status === 'entregue') $statusClass = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-500/10 dark:text-emerald-200';
+                                if ($status === 'em_rota') $statusClass = 'bg-amber-100 text-amber-800 dark:bg-amber-500/10 dark:text-amber-200';
+                                if ($status === 'pago') $statusClass = 'bg-blue-100 text-blue-800 dark:bg-blue-500/10 dark:text-blue-200';
+                                if ($status === 'cancelado') $statusClass = 'bg-rose-100 text-rose-800 dark:bg-rose-500/10 dark:text-rose-200';
+                            ?>
+                            <tr class="hover:bg-stone-50 dark:hover:bg-stone-800/60">
+                                <td class="px-3 py-2 font-semibold text-stone-900 dark:text-white">#<?= (int)($pedido['id'] ?? 0) ?></td>
+                                <td class="px-3 py-2 text-stone-600 dark:text-stone-300"><?= htmlspecialchars($dataFmt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2"><span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[11px] font-semibold <?= $statusClass ?>"><?= htmlspecialchars(str_replace('_',' ', $status), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span></td>
+                                <td class="px-3 py-2 text-right text-stone-900 dark:text-white">R$ <?= number_format((float)($pedido['total'] ?? 0), 2, ',', '.') ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        <?php if (empty($pedidosRecentes)): ?>
+                            <tr>
+                                <td colspan="4" class="px-3 py-4 text-sm text-stone-600 dark:text-stone-300">Nenhum pedido encontrado.</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>

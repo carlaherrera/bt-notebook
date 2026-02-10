@@ -62,18 +62,36 @@
         </div>
     </div>
 
+    <!-- Resumo validade -->
+    <div class="grid gap-3 grid-cols-1 sm:grid-cols-3 text-xs">
+        <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+            <p class="font-semibold text-gray-700 dark:text-gray-200">Válidos</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1"><?= (int)($resumo['val_validos'] ?? 0) ?></p>
+            <p class="text-gray-600 dark:text-gray-400">Dentro da validade</p>
+        </div>
+        <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+            <p class="font-semibold text-gray-700 dark:text-gray-200">Próximo</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1"><?= (int)($resumo['val_proximos'] ?? 0) ?></p>
+            <p class="text-gray-600 dark:text-gray-400">Vence em até 30 dias</p>
+        </div>
+        <div class="p-3 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+            <p class="font-semibold text-gray-700 dark:text-gray-200">Vencidos</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-gray-100 mt-1"><?= (int)($resumo['val_vencidos'] ?? 0) ?></p>
+            <p class="text-gray-600 dark:text-gray-400">Bloquear vendas</p>
+        </div>
+    </div>
+
     <!-- Filtros rápidos -->
     <div class="flex flex-wrap items-center gap-2">
         <div class="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/70 px-3 py-1 text-xs font-semibold text-gray-600 dark:text-gray-300">
             <i data-lucide="list-filter" class="w-4 h-4"></i>
             Filtros rápidos
         </div>
-        <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Todos</button>
-        <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Proteína</button>
-        <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Performance</button>
-        <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Energia</button>
-        <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Snacks</button>
-        <button class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Críticos</button>
+        <?php $statusVal = $resumo['status_val'] ?? ''; ?>
+        <a href="/admin/produtos" class="px-3 py-1.5 text-xs rounded-full border border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 <?= $statusVal === '' ? 'bg-gray-100 dark:bg-gray-800/70 font-semibold' : '' ?>">Todos</a>
+        <a href="/admin/produtos?status_validade=valido" class="px-3 py-1.5 text-xs rounded-full border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/40 <?= $statusVal === 'valido' ? 'bg-emerald-50 dark:bg-emerald-900/40 font-semibold' : '' ?>">Válidos</a>
+        <a href="/admin/produtos?status_validade=proximo" class="px-3 py-1.5 text-xs rounded-full border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/40 <?= $statusVal === 'proximo' ? 'bg-amber-50 dark:bg-amber-900/40 font-semibold' : '' ?>">Próximo do vencimento</a>
+        <a href="/admin/produtos?status_validade=vencido" class="px-3 py-1.5 text-xs rounded-full border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-900/40 <?= $statusVal === 'vencido' ? 'bg-rose-50 dark:bg-rose-900/40 font-semibold' : '' ?>">Vencidos</a>
     </div>
 
     <!-- Lista -->
@@ -81,8 +99,15 @@
         <?php foreach ($produtos as $prod): 
             $status = strtolower($prod['status'] ?? 'ativo');
             $statusColor = $status === 'critico' ? 'text-red-600 bg-red-50 border-red-200 dark:bg-red-900/40 dark:border-red-800' : ($status === 'alerta' ? 'text-amber-600 bg-amber-50 border-amber-200 dark:bg-amber-900/40 dark:border-amber-800' : 'text-emerald-600 bg-emerald-50 border-emerald-200 dark:bg-emerald-900/40 dark:border-emerald-800');
+            $val = $prod['status_validade'] ?? 'indefinido';
+            $valBadge = [
+                'vencido' => ['txt' => 'Vencido', 'class' => 'text-gray-700 bg-gray-50 border border-gray-200 dark:bg-gray-800/60 dark:border-gray-700'],
+                'proximo' => ['txt' => 'Próx. vencimento', 'class' => 'text-gray-700 bg-gray-50 border border-gray-200 dark:bg-gray-800/60 dark:border-gray-700'],
+                'valido' => ['txt' => 'Válido', 'class' => 'text-gray-700 bg-gray-50 border border-gray-200 dark:bg-gray-800/60 dark:border-gray-700'],
+            ][$val] ?? ['txt' => 'Sem validade', 'class' => 'text-gray-600 bg-gray-50 border border-gray-200 dark:bg-gray-800/60 dark:border-gray-700'];
+            $cardBorder = 'border-gray-200 dark:border-gray-800';
         ?>
-        <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm flex flex-col gap-3">
+        <div class="p-4 rounded-2xl border <?= $cardBorder ?> bg-white dark:bg-gray-900 shadow-sm flex flex-col gap-3">
             <div class="flex items-start justify-between gap-3">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -116,10 +141,15 @@
             </div>
 
             <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
-                <span class="inline-flex items-center gap-1"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Repor em breve</span>
+                <span class="inline-flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1 px-2 py-[3px] rounded-full border <?= $valBadge['class'] ?>">
+                        <i data-lucide="calendar-clock" class="w-3 h-3"></i>
+                        <?= $valBadge['txt'] ?>
+                    </span>
+                </span>
                 <div class="flex gap-1 items-center">
-                    <a href="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/ver" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs">Ver</a>
-                    <a href="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/editar" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 text-xs">Editar</a>
+                    <a href="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/ver" class="px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200">Ver</a>
+                    <a href="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/editar" class="px-3 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200">Editar</a>
                     <form action="/admin/produtos/<?= (int)($prod['id'] ?? 0) ?>/toggle" method="POST" class="inline">
                         <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
                         <?php $ativo = strtolower($prod['status'] ?? 'ativo') !== 'inativo'; ?>

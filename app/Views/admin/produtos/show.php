@@ -32,6 +32,18 @@
                     <span class="inline-flex items-center gap-1"><i data-lucide="box" class="w-4 h-4"></i> Estoque loja: <?= (int)($produto['estoque_loja'] ?? 0) ?></span>
                     <span class="inline-flex items-center gap-1"><i data-lucide="truck" class="w-4 h-4"></i> Consignado: <?= (int)($produto['estoque_consignado'] ?? 0) ?></span>
                     <span class="inline-flex items-center gap-1"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Mínimo: <?= (int)($produto['minimo'] ?? 0) ?></span>
+                    <?php
+                        $statusVal = $analytics['status_validade'] ?? 'indefinido';
+                        $statusLabel = [
+                            'vencido' => ['txt' => 'Vencido', 'class' => 'text-rose-700 bg-rose-50 border-rose-200 dark:bg-rose-900/40 dark:border-rose-800'],
+                            'proximo' => ['txt' => 'Próximo do vencimento', 'class' => 'text-amber-700 bg-amber-50 border-amber-200 dark:bg-amber-900/40 dark:border-amber-800'],
+                            'valido' => ['txt' => 'Dentro da validade', 'class' => 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:bg-emerald-900/40 dark:border-emerald-800'],
+                        ][$statusVal] ?? ['txt' => 'Sem validade', 'class' => 'text-gray-600 bg-gray-50 border-gray-200 dark:bg-gray-800/60 dark:border-gray-700'];
+                    ?>
+                    <span class="inline-flex items-center gap-1 px-2 py-[3px] text-[11px] rounded-full border <?= $statusLabel['class'] ?>">
+                        <i data-lucide="calendar-clock" class="w-3 h-3"></i>
+                        <?= $statusLabel['txt'] ?>
+                    </span>
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">

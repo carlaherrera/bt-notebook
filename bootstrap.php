@@ -8,30 +8,32 @@ if (!defined('BASE_PATH')) {
     define('BASE_PATH', __DIR__);
 }
 
-// Inicia a sessão (necessário para autenticação)
-if (session_status() === PHP_SESSION_NONE) {
-    $sessionLifetime = 60 * 60 * 24 * 3; // 3 dias
-    $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+// Inicia a sessão (necessário para autenticação) — pode ser pulada em scripts CLI definindo SKIP_SESSION
+if (!defined('SKIP_SESSION') || !SKIP_SESSION) {
+    if (session_status() === PHP_SESSION_NONE) {
+        $sessionLifetime = 60 * 60 * 24 * 3; // 3 dias
+        $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 
-    // Garante diretório de sessão válido (evita erro em C:/Windows/Temp)
-    $sessionPath = BASE_PATH . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'sessions';
-    if (!is_dir($sessionPath)) {
-        @mkdir($sessionPath, 0777, true);
-    }
-    if (is_dir($sessionPath) && is_writable($sessionPath)) {
-        ini_set('session.save_path', $sessionPath);
-    }
+        // Garante diretório de sessão válido (evita erro em C:/Windows/Temp)
+        $sessionPath = BASE_PATH . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'sessions';
+        if (!is_dir($sessionPath)) {
+            @mkdir($sessionPath, 0777, true);
+        }
+        if (is_dir($sessionPath) && is_writable($sessionPath)) {
+            ini_set('session.save_path', $sessionPath);
+        }
 
-    ini_set('session.gc_maxlifetime', (string) $sessionLifetime);
-    session_set_cookie_params([
-        'lifetime' => $sessionLifetime,
-        'path' => '/',
-        'domain' => '',
-        'secure' => $isHttps, // em produção, forçar HTTPS
-        'httponly' => true,
-        'samesite' => 'Strict',
-    ]);
-    session_start();
+        ini_set('session.gc_maxlifetime', (string) $sessionLifetime);
+        session_set_cookie_params([
+            'lifetime' => $sessionLifetime,
+            'path' => '/',
+            'domain' => '',
+            'secure' => $isHttps, // em produção, forçar HTTPS
+            'httponly' => true,
+            'samesite' => 'Strict',
+        ]);
+        session_start();
+    }
 }
 
 // Content Security Policy para mitigar XSS

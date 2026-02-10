@@ -1,5 +1,6 @@
 <?php
 // /app/Views/cliente/enderecos/index.php
+use App\Core\Security;
 ?>
 
 <section class="space-y-6">
@@ -30,7 +31,6 @@
         <div class="xl:col-span-2 p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
                 <h3 class="text-sm font-semibold text-stone-900 dark:text-white">Endereços salvos</h3>
-                <span class="text-[11px] text-stone-500 dark:text-stone-400">Mock</span>
             </div>
             <div class="grid gap-3 md:grid-cols-2">
                 <?php foreach ($enderecos as $end): ?>
@@ -43,8 +43,11 @@
                                 <?php endif; ?>
                             </div>
                             <div class="flex gap-1 text-xs">
-                                <button class="px-2 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">Editar</button>
-                                <button class="px-2 py-1 rounded-lg border border-rose-200 dark:border-rose-700 text-rose-700 dark:text-rose-200 hover:bg-rose-50 dark:hover:bg-rose-900/40">Excluir</button>
+                                <a href="/cliente/enderecos/<?= (int)$end['id'] ?>/editar" class="px-2 py-1 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">Editar</a>
+                                <form method="POST" action="/cliente/enderecos/<?= (int)$end['id'] ?>/excluir" onsubmit="return confirm('Excluir este endereço?');">
+                                    <input type="hidden" name="_csrf" value="<?= Security::csrfToken() ?>">
+                                    <button class="px-2 py-1 rounded-lg border border-rose-200 dark:border-rose-700 text-rose-700 dark:text-rose-200 hover:bg-rose-50 dark:hover:bg-rose-900/40" type="submit">Excluir</button>
+                                </form>
                             </div>
                         </div>
                         <p class="text-sm text-stone-700 dark:text-stone-200 leading-snug">
@@ -62,30 +65,37 @@
         <div class="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm space-y-3" id="novo">
             <div class="flex items-center justify-between">
                 <h3 class="text-sm font-semibold text-stone-900 dark:text-white">Adicionar endereço</h3>
-                <span class="text-[11px] text-stone-500 dark:text-stone-400">Mock</span>
             </div>
-            <form class="space-y-3">
+            <form class="space-y-3" method="POST" action="/cliente/enderecos">
+                <input type="hidden" name="_csrf" value="<?= Security::csrfToken() ?>">
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">Título</span>
-                    <input type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Casa / Trabalho">
+                    <input name="titulo" type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Casa / Trabalho" required>
                 </label>
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">Endereço</span>
-                    <input type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Rua, número, complemento">
+                    <input name="linha1" type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Rua, número, complemento" required>
+                </label>
+                <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
+                    <span class="font-semibold">Complemento</span>
+                    <input name="linha2" type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Apto, bloco">
                 </label>
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">Cidade / Estado</span>
-                    <input type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Cidade / UF">
+                    <div class="grid grid-cols-3 gap-2">
+                        <input name="cidade" type="text" class="col-span-2 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="Cidade" required>
+                        <input name="estado" type="text" class="rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="UF" required>
+                    </div>
                 </label>
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">CEP</span>
-                    <input type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="00000-000">
+                    <input name="cep" type="text" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" placeholder="00000-000" required>
                 </label>
                 <label class="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-200">
-                    <input type="checkbox" class="rounded border-stone-300 text-stone-900 dark:bg-stone-900 dark:border-stone-700">
+                    <input type="checkbox" name="principal" value="1" class="rounded border-stone-300 text-stone-900 dark:bg-stone-900 dark:border-stone-700">
                     Definir como principal
                 </label>
-                <button type="button" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-sm font-semibold hover:bg-stone-800">
+                <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-stone-900 text-white text-sm font-semibold hover:bg-stone-800">
                     <i data-lucide="save" class="w-4 h-4"></i>
                     Salvar endereço
                 </button>

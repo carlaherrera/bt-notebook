@@ -161,6 +161,67 @@ class SuporteController extends Controller
         $this->redirect('/cliente/suporte/' . $id . '?ok=1');
     }
 
+    public function edit($id): void
+    {
+        $id = (int)$id;
+        $userId = Auth::user()?->id;
+
+        $stmt = $this->db->prepare(
+            "SELECT * FROM " . Database::table('tickets') . " WHERE id = :id AND user_id = :user_id"
+        );
+        $stmt->execute(['id' => $id, 'user_id' => $userId]);
+        $ticket = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$ticket) {
+            http_response_code(404);
+            exit('Ticket não encontrado');
+        }
+
+        $categorias = ['pedido', 'fiscal', 'suporte', 'outros'];
+        $prioridades = ['baixa', 'media', 'alta'];
+        $statusList = ['aberto', 'em_atendimento', 'resolvido', 'fechado'];
+
+        $this->layout('layouts/painel', 'cliente/suporte/editar', [
+            'ticket' => $ticket,
+            'categorias' => $categorias,
+            'prioridades' => $prioridades,
+            'statusList' => $statusList,
+        ]);
+    }
+
+    public function update($id): void
+    {
+        $this->validateCsrf();
+        $id = (int)$id;
+        $userId = Auth::user()?->id;
+
+        $assunto = Security::sanitizeString($_POST['assunto'] ?? '');
+        $categoria = strtolower(Security::sanitizeString($_POST['categoria'] ?? ''));
+        $prioridade = strtolower(Security::sanitizeString($_POST['prioridade'] ?? 'media'));
+        $status = strtolower(Security::sanitizeString($_POST['status'] ?? 'aberto'));
+
+        if (!$assunto || !$categoria || !$prioridade || !$status) {
+            http_response_code(400);
+            exit('Dados obrigatórios faltando');
+        }
+
+        $stmt = $this->db->prepare(
+            "UPDATE " . Database::table('tickets') . "
+             SET assunto = :assunto, categoria = :categoria, prioridade = :prioridade, status = :status
+             WHERE id = :id AND user_id = :user_id"
+        );
+        $stmt->execute([
+            'assunto' => $assunto,
+            'categoria' => $categoria,
+            'prioridade' => $prioridade,
+            'status' => $status,
+            'id' => $id,
+            'user_id' => $userId,
+        ]);
+
+        $this->redirect('/cliente/suporte/' . $id . '?ok=1');
+    }
+
     public function fechar($id): void
     {
         $this->validateCsrf();

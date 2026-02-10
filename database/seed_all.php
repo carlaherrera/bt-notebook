@@ -18,6 +18,10 @@ $tables = [
     'user_preferences' => Database::table('user_preferences'),
     'attachments' => Database::table('attachments'),
     'produtos' => Database::table('produtos'),
+    'enderecos' => Database::table('enderecos'),
+    'pedidos' => Database::table('pedidos'),
+    'pedido_itens' => Database::table('pedido_itens'),
+    'pedido_eventos' => Database::table('pedido_eventos'),
     'parceiros' => Database::table('parceiros'),
     'consignado_produtos' => Database::table('consignado_produtos'),
     'consignado_movimentacoes' => Database::table('consignado_movimentacoes'),
@@ -40,6 +44,10 @@ $insert = function (string $table, array $row) use ($pdo, $driver) {
 
 // 1) Usuários
 // Limpa tabelas dependentes antes de recriar usuários
+$pdo->exec('DELETE FROM ' . $tables['pedido_eventos']);
+$pdo->exec('DELETE FROM ' . $tables['pedido_itens']);
+$pdo->exec('DELETE FROM ' . $tables['pedidos']);
+$pdo->exec('DELETE FROM ' . $tables['enderecos']);
 $pdo->exec('DELETE FROM ' . $tables['relatorios_log']);
 $pdo->exec('DELETE FROM ' . $tables['user_preferences']);
 $pdo->exec('DELETE FROM ' . $tables['parceiros']);
@@ -131,11 +139,105 @@ $produtosSeed = [
     ['nome' => 'Glutamina 300g', 'sku' => 'GLUT-300', 'categoria' => 'Recuperação', 'preco' => 79.90, 'estoque_loja' => 9, 'estoque_consignado' => 6, 'minimo' => 15, 'status' => 'critico'],
     ['nome' => 'Barra Proteica 45g', 'sku' => 'BARRA-45', 'categoria' => 'Snacks', 'preco' => 12.90, 'estoque_loja' => 260, 'estoque_consignado' => 130, 'minimo' => 80, 'status' => 'ativo'],
 ];
+$_idsProdutos = [];
 foreach ($produtosSeed as $prod) {
-    $insert($tables['produtos'], $prod);
+    $_idsProdutos[$prod['sku']] = $insert($tables['produtos'], $prod);
 }
 
 echo "Produtos criados: " . count($produtosSeed) . "\n";
+
+// 4c) Endereços do cliente
+$pdo->exec('DELETE FROM ' . $tables['enderecos']);
+$enderecosSeed = [
+    [
+        'user_id' => $idsUsuarios['cliente@exemplo.com.br'],
+        'titulo' => 'Casa',
+        'linha1' => 'Rua das Laranjeiras, 123',
+        'linha2' => 'Apto 45',
+        'cidade' => 'São Paulo',
+        'estado' => 'SP',
+        'cep' => '01310-000',
+        'principal' => 1,
+        'created_at' => date('Y-m-d H:i:s'),
+    ],
+    [
+        'user_id' => $idsUsuarios['cliente@exemplo.com.br'],
+        'titulo' => 'Trabalho',
+        'linha1' => 'Av. Paulista, 1000',
+        'linha2' => 'Conj. 1207',
+        'cidade' => 'São Paulo',
+        'estado' => 'SP',
+        'cep' => '01310-100',
+        'principal' => 0,
+        'created_at' => date('Y-m-d H:i:s'),
+    ],
+];
+$idsEnderecos = [];
+foreach ($enderecosSeed as $e) {
+    $idsEnderecos[] = $insert($tables['enderecos'], $e);
+}
+
+echo "Endereços criados: " . count($idsEnderecos) . "\n";
+
+// 4d) Pedidos do cliente (sem método de pagamento)
+$pdo->exec('DELETE FROM ' . $tables['pedido_eventos']);
+$pdo->exec('DELETE FROM ' . $tables['pedido_itens']);
+$pdo->exec('DELETE FROM ' . $tables['pedidos']);
+
+$pedidoSeed = [
+    [
+        'user_id' => $idsUsuarios['cliente@exemplo.com.br'],
+        'endereco_id' => $idsEnderecos[0] ?? null,
+        'pagamento_id' => null,
+        'status' => 'criado',
+        'subtotal' => 0,
+        'frete' => 15.00,
+        'total' => 0,
+        'created_at' => date('Y-m-d H:i:s', strtotime('-2 days')),
+    ],
+];
+
+$idsPedidos = [];
+foreach ($pedidoSeed as $p) {
+    $idsPedidos[] = $insert($tables['pedidos'], $p);
+}
+
+// Itens para o primeiro pedido
+$pdo->exec('DELETE FROM ' . $tables['pedido_itens']);
+if (!empty($idsPedidos)) {
+    $pedidoId = $idsPedidos[0];
+    $itens = [
+        ['sku' => 'WHEY-ISO-900', 'qtd' => 2],
+        ['sku' => 'CREA-300', 'qtd' => 1],
+    ];
+    $subtotal = 0;
+    foreach ($itens as $it) {
+        $sku = $it['sku'];
+        $prodId = $_idsProdutos[$sku] ?? null;
+        if (!$prodId) { continue; }
+        $stmt = $pdo->prepare('SELECT nome, preco FROM ' . $tables['produtos'] . ' WHERE id = :id');
+        $stmt->execute(['id' => $prodId]);
+        $prod = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($prod) {
+            $linhaTotal = $prod['preco'] * $it['qtd'];
+            $subtotal += $linhaTotal;
+            $insert($tables['pedido_itens'], [
+                'pedido_id' => $pedidoId,
+                'produto_id' => $prodId,
+                'nome_snapshot' => $prod['nome'],
+                'sku_snapshot' => $sku,
+                'qtd' => $it['qtd'],
+                'preco_unitario' => $prod['preco'],
+                'total_linha' => $linhaTotal,
+            ]);
+        }
+    }
+
+    $total = $subtotal + 15.00;
+    $upd = $pdo->prepare('UPDATE ' . $tables['pedidos'] . ' SET subtotal = :subtotal, total = :total WHERE id = :id');
+    $upd->execute(['subtotal' => $subtotal, 'total' => $total, 'id' => $pedidoId]);
+    echo "Pedidos criados: " . count($idsPedidos) . " (subtotal R$ {$subtotal})\n";
+}
 
 // 5) Consignado produtos
 $pdo->exec('DELETE FROM ' . $tables['consignado_produtos']);

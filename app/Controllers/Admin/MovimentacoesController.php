@@ -216,7 +216,7 @@ class MovimentacoesController extends Controller
         }
 
         try {
-            $sqlConsig = "SELECT cm.id, cm.tipo, cm.produto, cm.quantidade, cm.data, p.nome AS parceiro, cm.descricao, 'consignado' AS origem
+            $sqlConsig = "SELECT cm.id, cm.tipo, cm.produto, cm.quantidade, cm.data_mov AS data, p.nome AS parceiro, cm.descricao, 'consignado' AS origem
                           FROM " . Database::table('consignado_movimentacoes') . " cm
                           LEFT JOIN " . Database::table('parceiros') . " p ON p.id = cm.parceiro_id";
             $consig = $this->db->query($sqlConsig)->fetchAll(PDO::FETCH_ASSOC) ?: [];

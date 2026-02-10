@@ -20,14 +20,43 @@ class ProdutosController extends Controller
 
     public function index(): void
     {
+        $statusFiltro = strtolower(trim($_GET['status_validade'] ?? ''));
+
         $produtos = $this->db->query("SELECT * FROM " . Database::table('produtos') . " ORDER BY nome")
             ->fetchAll(PDO::FETCH_ASSOC);
+
+        $produtos = array_map(function ($p) {
+            $statusValidade = 'indefinido';
+            if (!empty($p['expira_em'])) {
+                $exp = strtotime((string)$p['expira_em']);
+                if ($exp !== false) {
+                    $dias = (int)floor(($exp - time()) / 86400);
+                    if ($dias < 0) {
+                        $statusValidade = 'vencido';
+                    } elseif ($dias <= 30) {
+                        $statusValidade = 'proximo';
+                    } else {
+                        $statusValidade = 'valido';
+                    }
+                }
+            }
+            $p['status_validade'] = $statusValidade;
+            return $p;
+        }, $produtos);
+
+        if (in_array($statusFiltro, ['valido', 'proximo', 'vencido'], true)) {
+            $produtos = array_values(array_filter($produtos, fn($p) => ($p['status_validade'] ?? 'indefinido') === $statusFiltro));
+        }
 
         $resumo = [
             'ativos' => count(array_filter($produtos, fn($p) => strtolower((string)($p['status'] ?? '')) === 'ativo')),
             'criticos' => count(array_filter($produtos, fn($p) => in_array(strtolower((string)($p['status'] ?? '')), ['critico', 'alerta'], true))),
             'itens_loja' => array_sum(array_column($produtos, 'estoque_loja')),
             'itens_consignado' => array_sum(array_column($produtos, 'estoque_consignado')),
+            'status_val' => $statusFiltro,
+            'val_validos' => count(array_filter($produtos, fn($p) => ($p['status_validade'] ?? '') === 'valido')),
+            'val_proximos' => count(array_filter($produtos, fn($p) => ($p['status_validade'] ?? '') === 'proximo')),
+            'val_vencidos' => count(array_filter($produtos, fn($p) => ($p['status_validade'] ?? '') === 'vencido')),
         ];
 
         $this->layout('layouts/painel', 'admin/produtos/index', [

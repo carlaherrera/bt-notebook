@@ -26,7 +26,7 @@ class ParceiroRepository
                        COALESCE(SUM(cp.estoque), 0) AS itens,
                        COALESCE(SUM(cp.devolucao), 0) AS devolucao,
                        COALESCE(SUM(cp.vendido_mes), 0) AS vendas_mes,
-                       COALESCE(SUM(CASE WHEN cp.estoque <= cp.minimo THEN 1 ELSE 0 END), 0) AS baixo,
+                       COALESCE(SUM(CASE WHEN cp.estoque <= cp.min THEN 1 ELSE 0 END), 0) AS baixo,
                        COALESCE(SUM(CASE WHEN cm.tipo = 'transferencia' THEN cm.quantidade ELSE 0 END), 0) AS transferencias_mes
                 FROM " . Database::table('parceiros') . " p
                 LEFT JOIN " . Database::table('usuarios') . " u ON u.id = p.usuario_id
@@ -44,7 +44,7 @@ class ParceiroRepository
                     COALESCE(SUM(cp.estoque), 0) AS itens,
                     COALESCE(SUM(cp.devolucao), 0) AS devolucao,
                     COALESCE(SUM(cp.vendido_mes), 0) AS vendas_mes,
-                    COALESCE(SUM(CASE WHEN cp.estoque <= cp.minimo THEN 1 ELSE 0 END), 0) AS itens_baixo
+                    COALESCE(SUM(CASE WHEN cp.estoque <= cp.min THEN 1 ELSE 0 END), 0) AS itens_baixo
              FROM " . Database::table('parceiros') . " p
              LEFT JOIN " . Database::table('usuarios') . " u ON u.id = p.usuario_id
              LEFT JOIN " . Database::table('consignado_produtos') . " cp ON cp.parceiro_id = p.id
@@ -87,7 +87,7 @@ class ParceiroRepository
         $stmt = $this->db->query(
             "SELECT 
                 COALESCE(SUM(cp.estoque),0) AS total_itens,
-                COALESCE(SUM(CASE WHEN cp.estoque <= cp.minimo THEN 1 ELSE 0 END),0) AS itens_alerta,
+                COALESCE(SUM(CASE WHEN cp.estoque <= cp.min THEN 1 ELSE 0 END),0) AS itens_alerta,
                 COALESCE(SUM(cp.vendido_mes),0) AS vendas_mes,
                 COALESCE(SUM(CASE WHEN cm.tipo = 'transferencia' THEN cm.quantidade ELSE 0 END),0) AS transferencias_mes
              FROM " . Database::table('parceiros') . " p

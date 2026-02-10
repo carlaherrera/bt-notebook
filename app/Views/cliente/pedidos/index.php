@@ -1,5 +1,6 @@
 <?php
 // /app/Views/cliente/pedidos/index.php
+use App\Core\Security;
 ?>
 
 <section class="space-y-6">
@@ -34,51 +35,83 @@
         <div class="xl:col-span-2 p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-sm font-semibold text-stone-900 dark:text-white">Lista de pedidos</h3>
+                <?php
+                    $statusAtual = $statusFiltro ?? '';
+                    $btn = function(string $label, string $value) use ($statusAtual) {
+                        $ativo = $statusAtual === $value ? 'bg-stone-900 text-white border-stone-900' : 'text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800 border-stone-200 dark:border-stone-700';
+                        $href = $value ? '/cliente/pedidos?status=' . urlencode($value) : '/cliente/pedidos';
+                        return "<a href='{$href}' class='px-3 py-1.5 rounded-lg border {$ativo}'>{$label}</a>";
+                    };
+                ?>
                 <div class="flex gap-2 text-xs">
-                    <button class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Todos</button>
-                    <button class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Em entrega</button>
-                    <button class="px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-800">Entregues</button>
+                    <?= $btn('Todos', '') ?>
+                    <?= $btn('Criados', 'criado') ?>
+                    <?= $btn('Em entrega', 'em_entrega') ?>
+                    <?= $btn('Entregues', 'entregue') ?>
+                    <?= $btn('Cancelados', 'cancelado') ?>
                 </div>
             </div>
 
             <div class="space-y-3">
+                <?php if (empty($pedidos)): ?>
+                    <div class="p-6 rounded-2xl border border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/40 text-sm text-stone-600 dark:text-stone-300">
+                        Nenhum pedido encontrado neste status.
+                    </div>
+                <?php endif; ?>
                 <?php foreach ($pedidos as $pedido): ?>
                     <div class="p-4 rounded-2xl border border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900 shadow-sm">
-                        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-sm font-semibold text-stone-900 dark:text-white"><?= htmlspecialchars($pedido['id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
-                                    <span class="text-[11px] px-2 py-[3px] rounded-full border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-200">
+                                    <span class="text-sm font-semibold text-stone-900 dark:text-white">#<?= htmlspecialchars($pedido['id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                                    <span class="text-[11px] px-2 py-[3px] rounded-full border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/60 text-stone-700 dark:text-stone-100">
                                         <?= htmlspecialchars($pedido['status'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                                     </span>
                                 </div>
-                                <p class="text-xs text-stone-600 dark:text-stone-400">Data: <?= htmlspecialchars($pedido['data'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                                <?php
+                                    $dt = !empty($pedido['created_at']) ? date('d/m/Y H:i', strtotime($pedido['created_at'])) : '';
+                                ?>
+                                <p class="text-xs text-stone-600 dark:text-stone-400">Data: <?= htmlspecialchars($dt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                             </div>
                             <div class="text-right text-sm font-semibold text-stone-900 dark:text-white">
-                                <?= htmlspecialchars($pedido['total'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                                R$ <?= number_format((float)($pedido['total'] ?? 0), 2, ',', '.') ?>
+                                <p class="text-[11px] text-stone-500">Subtotal R$ <?= number_format((float)($pedido['subtotal'] ?? 0), 2, ',', '.') ?> · Frete R$ <?= number_format((float)($pedido['frete'] ?? 0), 2, ',', '.') ?></p>
                             </div>
                         </div>
-                        <div class="mt-3 text-xs text-stone-600 dark:text-stone-400 space-y-1">
-                            <?php foreach ($pedido['itens'] as $item): ?>
-                                <div class="flex items-center justify-between">
-                                    <span><?= htmlspecialchars($item['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
-                                    <span class="text-stone-500 dark:text-stone-300">Qtd: <?= (int)($item['qtd'] ?? 0) ?></span>
-                                </div>
-                            <?php endforeach; ?>
+
+                        <div class="mt-3 text-xs text-stone-700 dark:text-stone-200 space-y-2">
+                            <div class="grid grid-cols-12 gap-2 font-semibold text-[13px] text-stone-900 dark:text-white border border-stone-100 dark:border-stone-800 rounded-xl px-3 py-2 bg-stone-50 dark:bg-stone-900/40">
+                                <span class="col-span-7">Produto</span>
+                                <span class="col-span-2 text-center">Qtd</span>
+                                <span class="col-span-3 text-right">Total</span>
+                            </div>
+                            <div class="space-y-1">
+                                <?php foreach (($pedido['itens'] ?? []) as $item): ?>
+                                    <div class="grid grid-cols-12 gap-2 px-3 py-2 rounded-lg border border-stone-100 dark:border-stone-800">
+                                        <span class="col-span-7 truncate" title="<?= htmlspecialchars($item['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"><?= htmlspecialchars($item['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                                        <span class="col-span-2 text-center">x<?= (int)($item['qtd'] ?? 0) ?></span>
+                                        <span class="col-span-3 text-right font-semibold">R$ <?= number_format((float)($item['total_linha'] ?? 0), 2, ',', '.') ?></span>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
                         </div>
+
                         <div class="mt-3 flex flex-wrap gap-2 text-xs">
-                            <a href="#" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
+                            <a href="/cliente/pedidos/<?= (int)$pedido['id'] ?>" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
                                 <i data-lucide="file-text" class="w-4 h-4"></i>
                                 Ver detalhes
                             </a>
-                            <a href="#" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
-                                <i data-lucide="truck" class="w-4 h-4"></i>
-                                Rastrear entrega
+                            <a href="/cliente/pedidos/<?= (int)$pedido['id'] ?>/editar" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                                Editar
                             </a>
-                            <a href="#" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
-                                <i data-lucide="life-buoy" class="w-4 h-4"></i>
-                                Abrir chamado
-                            </a>
+                            <form action="/cliente/pedidos/<?= (int)$pedido['id'] ?>/excluir" method="POST" onsubmit="return confirm('Deseja excluir este pedido?');" class="inline-flex">
+                                <input type="hidden" name="_csrf" value="<?= Security::csrfToken() ?>">
+                                <button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-stone-200 dark:border-stone-700 text-red-600 dark:text-red-300 hover:bg-stone-100 dark:hover:bg-stone-800">
+                                    <i data-lucide="trash" class="w-4 h-4"></i>
+                                    Excluir
+                                </button>
+                            </form>
                         </div>
                     </div>
                 <?php endforeach; ?>

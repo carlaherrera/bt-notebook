@@ -78,11 +78,14 @@ $router->post('/colaborador/preferencias', ['Colaborador\\PreferenciasController
 $router->get('/cliente', ['Cliente\\PainelController', 'index'], ['auth', 'role:cliente']);
 
 // Pedidos
-$router->get('/cliente/pedidos', ['Cliente\\PedidosController', 'index'], ['auth', 'role:cliente']);
-$router->get('/cliente/pedidos/novo', ['Cliente\\PedidosController', 'create'], ['auth', 'role:cliente']);
-$router->post('/cliente/pedidos', ['Cliente\\PedidosController', 'store'], ['auth', 'role:cliente']);
-$router->get('/cliente/pedidos/{id}', ['Cliente\\PedidosController', 'show'], ['auth', 'role:cliente']);
-$router->post('/cliente/pedidos/{id}/cancelar', ['Cliente\\PedidosController', 'cancel'], ['auth', 'role:cliente']);
+$router->get('/cliente/pedidos', ['Cliente\PedidosController', 'index'], ['auth', 'role:cliente']);
+$router->get('/cliente/pedidos/novo', ['Cliente\PedidosController', 'create'], ['auth', 'role:cliente']);
+$router->post('/cliente/pedidos', ['Cliente\PedidosController', 'store'], ['auth', 'role:cliente']);
+$router->get('/cliente/pedidos/{id}', ['Cliente\PedidosController', 'show'], ['auth', 'role:cliente']);
+$router->get('/cliente/pedidos/{id}/editar', ['Cliente\PedidosController', 'edit'], ['auth', 'role:cliente']);
+$router->post('/cliente/pedidos/{id}/editar', ['Cliente\PedidosController', 'update'], ['auth', 'role:cliente']);
+$router->post('/cliente/pedidos/{id}/excluir', ['Cliente\PedidosController', 'destroy'], ['auth', 'role:cliente']);
+$router->post('/cliente/pedidos/{id}/cancelar', ['Cliente\PedidosController', 'cancel'], ['auth', 'role:cliente']);
 
 // Endereços
 $router->get('/cliente/enderecos', ['Cliente\\EnderecosController', 'index'], ['auth', 'role:cliente']);
@@ -92,25 +95,21 @@ $router->get('/cliente/enderecos/{id}/editar', ['Cliente\\EnderecosController', 
 $router->post('/cliente/enderecos/{id}/editar', ['Cliente\\EnderecosController', 'update'], ['auth', 'role:cliente']);
 $router->post('/cliente/enderecos/{id}/excluir', ['Cliente\\EnderecosController', 'destroy'], ['auth', 'role:cliente']);
 
-// Pagamentos
-$router->get('/cliente/pagamentos', ['Cliente\\PagamentosController', 'index'], ['auth', 'role:cliente']);
-$router->get('/cliente/pagamentos/novo', ['Cliente\\PagamentosController', 'create'], ['auth', 'role:cliente']);
-$router->post('/cliente/pagamentos', ['Cliente\\PagamentosController', 'store'], ['auth', 'role:cliente']);
-$router->get('/cliente/pagamentos/{id}/editar', ['Cliente\\PagamentosController', 'edit'], ['auth', 'role:cliente']);
-$router->post('/cliente/pagamentos/{id}/editar', ['Cliente\\PagamentosController', 'update'], ['auth', 'role:cliente']);
-$router->post('/cliente/pagamentos/{id}/excluir', ['Cliente\\PagamentosController', 'destroy'], ['auth', 'role:cliente']);
-
 // Suporte
-$router->get('/cliente/suporte', ['Cliente\\SuporteController', 'index'], ['auth', 'role:cliente']);
-$router->get('/cliente/suporte/novo', ['Cliente\\SuporteController', 'create'], ['auth', 'role:cliente']);
-$router->post('/cliente/suporte', ['Cliente\\SuporteController', 'store'], ['auth', 'role:cliente']);
-$router->get('/cliente/suporte/{id}', ['Cliente\\SuporteController', 'show'], ['auth', 'role:cliente']);
-$router->post('/cliente/suporte/{id}/responder', ['Cliente\\SuporteController', 'responder'], ['auth', 'role:cliente']);
-$router->post('/cliente/suporte/{id}/fechar', ['Cliente\\SuporteController', 'fechar'], ['auth', 'role:cliente']);
+$router->get('/cliente/suporte', ['Cliente\SuporteController', 'index'], ['auth', 'role:cliente']);
+$router->get('/cliente/suporte/novo', ['Cliente\SuporteController', 'create'], ['auth', 'role:cliente']);
+$router->post('/cliente/suporte', ['Cliente\SuporteController', 'store'], ['auth', 'role:cliente']);
+$router->get('/cliente/suporte/{id}', ['Cliente\SuporteController', 'show'], ['auth', 'role:cliente']);
+$router->post('/cliente/suporte/{id}/responder', ['Cliente\SuporteController', 'responder'], ['auth', 'role:cliente']);
+$router->post('/cliente/suporte/{id}/fechar', ['Cliente\SuporteController', 'fechar'], ['auth', 'role:cliente']);
+$router->get('/cliente/suporte/{id}/editar', ['Cliente\SuporteController', 'edit'], ['auth', 'role:cliente']);
+$router->post('/cliente/suporte/{id}/editar', ['Cliente\SuporteController', 'update'], ['auth', 'role:cliente']);
 
 // Notas Fiscais
-$router->get('/cliente/notas', ['Cliente\\NotasController', 'index'], ['auth', 'role:cliente']);
-$router->get('/cliente/notas/{id}', ['Cliente\\NotasController', 'show'], ['auth', 'role:cliente']);
+$router->get('/cliente/notas', ['Cliente\NotasController', 'index'], ['auth', 'role:cliente']);
+$router->get('/cliente/notas/{id}', ['Cliente\NotasController', 'show'], ['auth', 'role:cliente']);
+$router->get('/cliente/notas/{id}/editar', ['Cliente\NotasController', 'edit'], ['auth', 'role:cliente']);
+$router->post('/cliente/notas/{id}/editar', ['Cliente\NotasController', 'update'], ['auth', 'role:cliente']);
 
 // Perfil e Preferências
 $router->get('/cliente/perfil', ['Cliente\\PerfilController', 'index'], ['auth', 'role:cliente']);
