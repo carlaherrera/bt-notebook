@@ -25,16 +25,24 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400">Entradas, transferências, vendas, devoluções e ajustes.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <form method="GET" action="/admin/movimentacoes" class="flex flex-wrap gap-2 items-center">
-                    <input type="hidden" name="dias" value="<?= (int)($filtros['dias'] ?? 30) ?>" />
-                    <input type="text" name="tipo" value="<?= htmlspecialchars($filtros['tipo'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="tipo" class="w-28 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
-                    <input type="text" name="parceiro" value="<?= htmlspecialchars($filtros['parceiro'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="parceiro" class="w-32 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
-                    <input type="text" name="produto" value="<?= htmlspecialchars($filtros['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="produto" class="w-32 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
-                    <select name="dias" class="w-28 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
-                        <?php foreach ([7, 30, 90, 180] as $d): ?>
-                            <option value="<?= $d ?>" <?= (int)($filtros['dias'] ?? 30) === $d ? 'selected' : '' ?>>Últimos <?= $d ?>d</option>
-                        <?php endforeach; ?>
-                    </select>
+                <a href="/admin/movimentacoes/nova" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    Nova movimentação
+                </a>
+                <button class="inline-flex items-center gap-2 rounded-xl bg-blue-600 text-white px-4 py-2 text-sm font-semibold hover:bg-blue-700 transition-colors">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    Exportar CSV
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filtros -->
+    <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
+        <form method="GET" action="/admin/movimentacoes" class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Filtros</h3>
+                <div class="flex gap-2">
                     <button type="submit" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                         <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
                         Filtrar
@@ -43,18 +51,21 @@
                         <i data-lucide="x" class="w-4 h-4"></i>
                         Limpar
                     </a>
-                </form>
-                <a href="/admin/movimentacoes/nova" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                    Nova movimentação
-                </a>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                    Exportar CSV
-                </button>
+                </div>
             </div>
-        </div>
-    </header>
+            <div class="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+                <input type="hidden" name="dias" value="<?= (int)($filtros['dias'] ?? 30) ?>" />
+                <input type="text" name="tipo" value="<?= htmlspecialchars($filtros['tipo'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="Tipo" class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                <input type="text" name="parceiro" value="<?= htmlspecialchars($filtros['parceiro'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="Parceiro" class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                <input type="text" name="produto" value="<?= htmlspecialchars($filtros['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" placeholder="Produto" class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm" />
+                <select name="dias" class="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                    <?php foreach ([7, 30, 90, 180] as $d): ?>
+                        <option value="<?= $d ?>" <?= (int)($filtros['dias'] ?? 30) === $d ? 'selected' : '' ?>>Últimos <?= $d ?> dias</option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </form>
+    </div>
 
     <!-- Resumo -->
     <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">

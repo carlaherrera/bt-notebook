@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+// Carregar funções helper globais para acesso seguro a arrays
+require_once __DIR__ . '/ViewFunctions.php';
+
 class View
 {
     /**

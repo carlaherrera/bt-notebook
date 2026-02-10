@@ -268,6 +268,216 @@ a:hover {
   color: var(--color-primary-dark);
 }
 
+/* Links em botões com background - forçar branco */
+a[class*="bg-"] {
+  color: white !important;
+}
+
+a[class*="bg-"]:hover {
+  color: white !important;
+}
+
+/* Links em botões outline com border-stone - forçar cor da borda */
+a[class*="border-stone-"] {
+  color: #78716c !important;
+}
+
+a[class*="border-stone-"]:hover {
+  color: #57534e !important;
+}
+
+/* Links em botões outline com border-gray - forçar cor da borda */
+a[class*="border-gray-"] {
+  color: #4b5563 !important;
+}
+
+a[class*="border-gray-"]:hover {
+  color: #374151 !important;
+}
+
+/* Links em botões outline com border-blue - forçar cor da borda */
+a[class*="border-blue-"] {
+  color: #2563eb !important;
+}
+
+a[class*="border-blue-"]:hover {
+  color: #1d4ed8 !important;
+}
+
+/* Links em botões outline com border-red - forçar cor da borda */
+a[class*="border-red-"] {
+  color: #dc2626 !important;
+}
+
+a[class*="border-red-"]:hover {
+  color: #b91c1c !important;
+}
+
+/* Links em botões outline com border-green - forçar cor da borda */
+a[class*="border-green-"] {
+  color: #16a34a !important;
+}
+
+a[class*="border-green-"]:hover {
+  color: #15803d !important;
+}
+
+/* Links em botões outline com border-amber - forçar cor da borda */
+a[class*="border-amber-"] {
+  color: #d97706 !important;
+}
+
+a[class*="border-amber-"]:hover {
+  color: #b45309 !important;
+}
+
+/* Links em botões outline com border-slate - forçar cor da borda */
+a[class*="border-slate-"] {
+  color: #64748b !important;
+}
+
+a[class*="border-slate-"]:hover {
+  color: #475569 !important;
+}
+
+/* Links em botões com background primário - forçar branco */
+a[class*="bg-\[var(--primary"] {
+  color: white !important;
+}
+
+a[class*="bg-\[var(--primary"]:hover {
+  color: white !important;
+}
+
+/* Regra Global para Links em Botões - Solid Style */
+/* Links dentro de botões solid devem ser brancos */
+.inline-flex[class*="bg-blue-"] > a,
+.inline-flex[class*="bg-blue-"] a,
+.inline-flex[class*="bg-red-"] > a,
+.inline-flex[class*="bg-red-"] a,
+.inline-flex[class*="bg-green-"] > a,
+.inline-flex[class*="bg-green-"] a,
+.inline-flex[class*="bg-amber-"] > a,
+.inline-flex[class*="bg-amber-"] a,
+.inline-flex[class*="bg-stone-"] > a,
+.inline-flex[class*="bg-stone-"] a {
+  color: white !important;
+  text-decoration: none;
+}
+
+.inline-flex[class*="bg-blue-"] > a:hover,
+.inline-flex[class*="bg-blue-"] a:hover,
+.inline-flex[class*="bg-red-"] > a:hover,
+.inline-flex[class*="bg-red-"] a:hover,
+.inline-flex[class*="bg-green-"] > a:hover,
+.inline-flex[class*="bg-green-"] a:hover,
+.inline-flex[class*="bg-amber-"] > a:hover,
+.inline-flex[class*="bg-amber-"] a:hover,
+.inline-flex[class*="bg-stone-"] > a:hover,
+.inline-flex[class*="bg-stone-"] a:hover {
+  color: white !important;
+}
+
+/* Forçar branco em todos os links dentro de elementos com background */
+[class*="bg-blue-"] a,
+[class*="bg-red-"] a,
+[class*="bg-green-"] a,
+[class*="bg-amber-"] a,
+[class*="bg-stone-"] a {
+  color: white !important;
+}
+
+[class*="bg-blue-"] a:hover,
+[class*="bg-red-"] a:hover,
+[class*="bg-green-"] a:hover,
+[class*="bg-amber-"] a:hover,
+[class*="bg-stone-"] a:hover {
+  color: white !important;
+}
+
+/* Regra Global para Botões Outline - Texto com cor da borda */
+/* Aplicar cor do texto baseado na cor da borda */
+.inline-flex[class*="border-blue-600"] > a,
+.inline-flex[class*="border-blue-600"] a {
+  color: #2563eb !important;
+  text-decoration: none;
+}
+
+.inline-flex[class*="border-blue-600"] > a:hover,
+.inline-flex[class*="border-blue-600"] a:hover {
+  color: #1d4ed8 !important;
+}
+
+.inline-flex[class*="border-red-600"] > a,
+.inline-flex[class*="border-red-600"] a {
+  color: #dc2626 !important;
+  text-decoration: none;
+}
+
+.inline-flex[class*="border-red-600"] > a:hover,
+.inline-flex[class*="border-red-600"] a:hover {
+  color: #b91c1c !important;
+}
+
+.inline-flex[class*="border-green-600"] > a,
+.inline-flex[class*="border-green-600"] a {
+  color: #16a34a !important;
+  text-decoration: none;
+}
+
+.inline-flex[class*="border-green-600"] > a:hover,
+.inline-flex[class*="border-green-600"] a:hover {
+  color: #15803d !important;
+}
+
+.inline-flex[class*="border-amber-600"] > a,
+.inline-flex[class*="border-amber-600"] a {
+  color: #d97706 !important;
+  text-decoration: none;
+}
+
+.inline-flex[class*="border-amber-600"] > a:hover,
+.inline-flex[class*="border-amber-600"] a:hover {
+  color: #b45309 !important;
+}
+
+.inline-flex[class*="border-stone-600"] > a,
+.inline-flex[class*="border-stone-600"] a {
+  color: #78716c !important;
+  text-decoration: none;
+}
+
+.inline-flex[class*="border-stone-600"] > a:hover,
+.inline-flex[class*="border-stone-600"] a:hover {
+  color: #57534e !important;
+}
+
+/* Dark mode para links em botões outline */
+.dark .inline-flex[class*="border-blue-400"] > a,
+.dark .inline-flex[class*="border-blue-400"] a {
+  color: #60a5fa !important;
+}
+
+.dark .inline-flex[class*="border-red-400"] > a,
+.dark .inline-flex[class*="border-red-400"] a {
+  color: #f87171 !important;
+}
+
+.dark .inline-flex[class*="border-green-400"] > a,
+.dark .inline-flex[class*="border-green-400"] a {
+  color: #4ade80 !important;
+}
+
+.dark .inline-flex[class*="border-amber-400"] > a,
+.dark .inline-flex[class*="border-amber-400"] a {
+  color: #fbbf24 !important;
+}
+
+.dark .inline-flex[class*="border-stone-400"] > a,
+.dark .inline-flex[class*="border-stone-400"] a {
+  color: #a8a29e !important;
+}
+
 /* Botões */
 .btn {
   display: inline-flex;
