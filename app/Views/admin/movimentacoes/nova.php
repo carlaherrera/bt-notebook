@@ -68,7 +68,8 @@
                 <select name="produto" required class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
                     <option value="" disabled selected>Selecione</option>
                     <?php foreach ($produtos as $p): ?>
-                        <option value="<?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"><?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
+                        <?php $nomeProd = is_array($p) ? ($p['nome'] ?? '') : $p; ?>
+                        <option value="<?= htmlspecialchars($nomeProd, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"><?= htmlspecialchars($nomeProd, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>

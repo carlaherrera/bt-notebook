@@ -22,9 +22,9 @@
                     Relatório do parceiro
                 </div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-                    <?= htmlspecialchars($parceiro['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                    <?= htmlspecialchars($parceiro['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                 </h1>
-                <p class="text-sm text-slate-500 dark:text-slate-400">Período <?= htmlspecialchars($periodo['inicio'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> a <?= htmlspecialchars($periodo['fim'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">Período <?= htmlspecialchars($periodo['inicio'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> a <?= htmlspecialchars($periodo['fim'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
             </div>
             <div class="flex flex-wrap gap-2">
                 <a href="/admin/parceiros/<?= (int)($parceiro['id'] ?? 0) ?>/ver" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
@@ -85,10 +85,10 @@
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                         <?php foreach ($topProdutos as $item): ?>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/60">
-                                <td class="px-3 py-2 font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($item['produto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['sku'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2 font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($item['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
                                 <td class="px-3 py-2 text-gray-900 dark:text-white"><?= (int)($item['vendas'] ?? 0) ?></td>
-                                <td class="px-3 py-2 text-gray-900 dark:text-white"><?= htmlspecialchars($item['faturado'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2 text-gray-900 dark:text-white"><?= htmlspecialchars($item['faturado'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="flex items-center justify-between rounded-xl border border-gray-100 dark:border-gray-800 px-3 py-2 bg-gray-50 dark:bg-gray-800/60">
                     <span>Parceiro</span>
-                    <span class="font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($parceiro['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                    <span class="font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($parceiro['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                 </div>
                 <div class="flex items-center justify-between rounded-xl border border-gray-100 dark:border-gray-800 px-3 py-2 bg-gray-50 dark:bg-gray-800/60">
                     <span>Filtros extras</span>
@@ -131,8 +131,8 @@
             <?php foreach ($movimentacoes as $mov): ?>
                 <div class="p-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-900/60 flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($mov['tipo'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400"><?= htmlspecialchars($mov['descricao'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($mov['tipo'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400"><?= htmlspecialchars($mov['descricao'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                     </div>
                     <div class="text-right text-sm font-semibold text-gray-900 dark:text-white">
                         <?= (int)($mov['quantidade'] ?? 0) ?>

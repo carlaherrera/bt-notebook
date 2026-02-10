@@ -111,17 +111,17 @@
             <div class="flex items-start justify-between gap-3">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($prod['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($prod['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                         <span class="text-[11px] px-2 py-[3px] rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300">
-                            <?= htmlspecialchars($prod['categoria'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                            <?= htmlspecialchars($prod['categoria'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                         </span>
                     </div>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">SKU <?= htmlspecialchars($prod['sku'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">SKU <?= htmlspecialchars($prod['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                     <p class="text-xs text-gray-600 dark:text-gray-300 font-semibold">R$ <?= htmlspecialchars(number_format((float)($prod['preco'] ?? 0), 2, ',', '.'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                 </div>
                 <span class="inline-flex items-center gap-1 text-[11px] px-2 py-[3px] rounded-full border <?= $statusColor ?>">
                     <i data-lucide="dot" class="w-3 h-3"></i>
-                    <?= htmlspecialchars($prod['status'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                    <?= htmlspecialchars($prod['status'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                 </span>
             </div>
 

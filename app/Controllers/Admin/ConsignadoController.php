@@ -235,7 +235,15 @@ class ConsignadoController extends Controller
 
     private function carregarProdutosLoja(): array
     {
-        $stmt = $this->db->query("SELECT id, nome, sku FROM " . Database::table('produtos') . " ORDER BY nome");
+        $sql = "(
+                    SELECT id, nome, sku FROM " . Database::table('produtos') . "
+                )
+                UNION
+                (
+                    SELECT NULL as id, produto AS nome, sku FROM " . Database::table('consignado_produtos') . "
+                )
+                ORDER BY nome";
+        $stmt = $this->db->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 // /app/Views/admin/painel/index.php
+include __DIR__ . '/../../components/button.php';
 ?>
 
 <style>
@@ -130,6 +131,103 @@
         </div>
     </header>
 
+    <!-- Validação de Componente de Botão -->
+    <div class="p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200/70 dark:border-gray-800 shadow-sm">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Validação de Componentes de Botão</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">Teste de contraste WCAG 2.1 AA em tema light e dark</p>
+        
+        <div class="space-y-8">
+            <!-- SOLID STYLE -->
+            <div>
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4">Solid (Preenchido)</h3>
+                <div class="space-y-3">
+                    <!-- Primary Solid -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Primary</p>
+                        <div class="flex flex-wrap gap-2">
+                            <?= renderButton(['text' => 'Salvar', 'variant' => 'primary', 'style' => 'solid', 'icon' => 'save', 'size' => 'sm']) ?>
+                            <?= renderButton(['text' => 'Salvar', 'variant' => 'primary', 'style' => 'solid', 'icon' => 'save']) ?>
+                            <?= renderButton(['text' => 'Salvar', 'variant' => 'primary', 'style' => 'solid', 'icon' => 'save', 'size' => 'lg']) ?>
+                            <?= renderButton(['text' => 'Desabilitado', 'variant' => 'primary', 'style' => 'solid', 'disabled' => true]) ?>
+                        </div>
+                    </div>
+                    <!-- Secondary Solid -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Secondary</p>
+                        <div class="flex flex-wrap gap-2">
+                            <?= renderButton(['text' => 'Editar', 'variant' => 'secondary', 'style' => 'solid', 'icon' => 'pencil', 'size' => 'sm']) ?>
+                            <?= renderButton(['text' => 'Editar', 'variant' => 'secondary', 'style' => 'solid', 'icon' => 'pencil']) ?>
+                            <?= renderButton(['text' => 'Editar', 'variant' => 'secondary', 'style' => 'solid', 'icon' => 'pencil', 'size' => 'lg']) ?>
+                            <?= renderButton(['text' => 'Desabilitado', 'variant' => 'secondary', 'style' => 'solid', 'disabled' => true]) ?>
+                        </div>
+                    </div>
+                    <!-- Danger Solid -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Danger</p>
+                        <div class="flex flex-wrap gap-2">
+                            <?= renderButton(['text' => 'Deletar', 'variant' => 'danger', 'style' => 'solid', 'icon' => 'trash-2', 'size' => 'sm']) ?>
+                            <?= renderButton(['text' => 'Deletar', 'variant' => 'danger', 'style' => 'solid', 'icon' => 'trash-2']) ?>
+                            <?= renderButton(['text' => 'Deletar', 'variant' => 'danger', 'style' => 'solid', 'icon' => 'trash-2', 'size' => 'lg']) ?>
+                            <?= renderButton(['text' => 'Desabilitado', 'variant' => 'danger', 'style' => 'solid', 'disabled' => true]) ?>
+                        </div>
+                    </div>
+                    <!-- Success Solid -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Success</p>
+                        <div class="flex flex-wrap gap-2">
+                            <?= renderButton(['text' => 'Confirmar', 'variant' => 'success', 'style' => 'solid', 'icon' => 'check', 'size' => 'sm']) ?>
+                            <?= renderButton(['text' => 'Confirmar', 'variant' => 'success', 'style' => 'solid', 'icon' => 'check']) ?>
+                            <?= renderButton(['text' => 'Confirmar', 'variant' => 'success', 'style' => 'solid', 'icon' => 'check', 'size' => 'lg']) ?>
+                            <?= renderButton(['text' => 'Desabilitado', 'variant' => 'success', 'style' => 'solid', 'disabled' => true]) ?>
+                        </div>
+                    </div>
+                    <!-- Warning Solid -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Warning</p>
+                        <div class="flex flex-wrap gap-2">
+                            <?= renderButton(['text' => 'Atenção', 'variant' => 'warning', 'style' => 'solid', 'icon' => 'alert-circle', 'size' => 'sm']) ?>
+                            <?= renderButton(['text' => 'Atenção', 'variant' => 'warning', 'style' => 'solid', 'icon' => 'alert-circle']) ?>
+                            <?= renderButton(['text' => 'Atenção', 'variant' => 'warning', 'style' => 'solid', 'icon' => 'alert-circle', 'size' => 'lg']) ?>
+                            <?= renderButton(['text' => 'Desabilitado', 'variant' => 'warning', 'style' => 'solid', 'disabled' => true]) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OUTLINE STYLE -->
+            <div>
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4">Outline (Borda)</h3>
+                <div class="flex flex-wrap gap-2">
+                    <?= renderButton(['text' => 'Primary', 'variant' => 'primary', 'style' => 'outline', 'icon' => 'plus']) ?>
+                    <?= renderButton(['text' => 'Secondary', 'variant' => 'secondary', 'style' => 'outline', 'icon' => 'plus']) ?>
+                    <?= renderButton(['text' => 'Danger', 'variant' => 'danger', 'style' => 'outline', 'icon' => 'plus']) ?>
+                    <?= renderButton(['text' => 'Success', 'variant' => 'success', 'style' => 'outline', 'icon' => 'plus']) ?>
+                    <?= renderButton(['text' => 'Warning', 'variant' => 'warning', 'style' => 'outline', 'icon' => 'plus']) ?>
+                </div>
+            </div>
+
+            <!-- COMO LINK -->
+            <div>
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4">Como Link</h3>
+                <div class="flex flex-wrap gap-2">
+                    <?= renderButton(['text' => 'Ir para usuários', 'variant' => 'primary', 'style' => 'solid', 'icon' => 'users', 'href' => '/admin/usuarios']) ?>
+                    <?= renderButton(['text' => 'Configurações', 'variant' => 'secondary', 'style' => 'outline', 'icon' => 'settings', 'href' => '/admin/configuracoes']) ?>
+                </div>
+            </div>
+
+            <!-- SUBMIT (para formulários) -->
+            <div>
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4">Submit (Formulários)</h3>
+                <div class="flex flex-wrap gap-2">
+                    <?= renderButton(['text' => 'Salvar', 'variant' => 'primary', 'style' => 'solid', 'icon' => 'save', 'type' => 'submit']) ?>
+                    <?= renderButton(['text' => 'Enviar', 'variant' => 'success', 'style' => 'solid', 'icon' => 'send', 'type' => 'submit']) ?>
+                    <?= renderButton(['text' => 'Cancelar', 'variant' => 'secondary', 'style' => 'outline', 'icon' => 'x', 'type' => 'button']) ?>
+                    <?= renderButton(['text' => 'Deletar', 'variant' => 'danger', 'style' => 'solid', 'icon' => 'trash-2', 'type' => 'submit']) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="grid gap-4 grid-cols-1 lg:grid-cols-3">
         <div class="p-4 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200/70 dark:border-gray-800 shadow-sm space-y-2 lg:col-span-3 xl:col-span-3">
             <div class="flex items-center justify-between gap-3 flex-wrap">
@@ -167,9 +265,12 @@
         <a href="/admin/movimentacoes" class="p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
             <div>
                 <p class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Movimentações</p>
-                <p class="text-lg font-bold text-gray-900 dark:text-white mt-1">Fluxo de estoque</p>
+                <p class="text-lg font-bold text-gray-900 dark:text-white mt-1 inline-flex items-center gap-2">
+                    <i data-lucide="arrow-left-right" class="w-5 h-5 text-gray-900 dark:text-white"></i>
+                    Fluxo de estoque
+                </p>
             </div>
-            <span class="icon-badge"><i data-lucide="arrows-left-right" class="w-5 h-5"></i></span>
+            <span class="icon-badge"><i data-lucide="arrow-left-right" class="w-5 h-5"></i></span>
         </a>
         <a href="/admin/consignado" class="p-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-sm flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition">
             <div>

@@ -42,6 +42,7 @@ $router->post('/admin/produtos/{id}/toggle', ['Admin\\ProdutosController', 'togg
 $router->post('/admin/produtos/{id}/excluir', ['Admin\\ProdutosController', 'destroy'], ['auth', 'role:admin']);
 $router->get('/admin/produtos/{id}/ver', ['Admin\\ProdutosController', 'show'], ['auth', 'role:admin']);
 $router->get('/admin/movimentacoes', ['Admin\\MovimentacoesController', 'index'], ['auth', 'role:admin']);
+$router->get('/admin/movimentacoes/transferir', ['Admin\\MovimentacoesController', 'transferir'], ['auth', 'role:admin']);
 $router->get('/admin/movimentacoes/nova', ['Admin\\MovimentacoesController', 'nova'], ['auth', 'role:admin']);
 $router->post('/admin/movimentacoes', ['Admin\\MovimentacoesController', 'store'], ['auth', 'role:admin']);
 $router->get('/admin/movimentacoes/{id}/editar', ['Admin\\MovimentacoesController', 'edit'], ['auth', 'role:admin']);

@@ -22,9 +22,9 @@
                     Consignado
                 </div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-                    <?= htmlspecialchars($parceiro['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                    <?= htmlspecialchars($parceiro['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                     <span class="text-[11px] px-2 py-[3px] rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300">
-                        <?= htmlspecialchars($parceiro['cidade'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                        <?= htmlspecialchars($parceiro['cidade'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                     </span>
                 </h1>
                 <p class="text-sm text-slate-500 dark:text-slate-400">Estoque consignado, vendas, devoluções e movimentações.</p>
@@ -59,7 +59,7 @@
         </div>
         <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
             <p class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400">Vendido no mês</p>
-            <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1"><?= array_sum(array_column($produtos, 'vendido_mes')) ?></p>
+            <p class="text-2xl font-bold text-gray-900 dark:text-white mt-1"><?= array_sum(array_column($produtos, 'vendido_mes' ?? [])) ?></p>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Origem parceiro</p>
         </div>
         <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm">
@@ -75,7 +75,7 @@
             <div class="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm space-y-3">
                 <div class="flex items-center justify-between">
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Transferir para parceiro</h3>
-                    <span class="text-[11px] text-gray-500 dark:text-gray-400">Loja → <?= htmlspecialchars($parceiro['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                    <span class="text-[11px] text-gray-500 dark:text-gray-400">Loja → <?= htmlspecialchars($parceiro['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                 </div>
                 <form action="/admin/consignado/transferir" method="POST" class="space-y-3">
                     <input type="hidden" name="_csrf" value="<?= \App\Core\Security::csrfToken(); ?>">
@@ -128,10 +128,11 @@
                     <div class="grid gap-3 md:grid-cols-2">
                         <label class="space-y-1 text-sm text-gray-700 dark:text-gray-200">
                             <span class="font-semibold">Produto</span>
-                            <select name="produto_id" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
+                            <select name="produto_nome" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
                                 <option value="">Selecione</option>
-                                <?php foreach ($produtos as $p): ?>
-                                    <option value="<?= htmlspecialchars($p['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"><?= htmlspecialchars($p['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> (<?= htmlspecialchars($p['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>)</option>
+                                <?php foreach ($produtosLoja as $p): ?>
+                                    <?php $nomeProd = $p['nome'] ?? ($p['produto'] ?? ''); ?>
+                                    <option value="<?= htmlspecialchars($nomeProd, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"><?= htmlspecialchars($nomeProd, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> (<?= htmlspecialchars($p['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>)</option>
                                 <?php endforeach; ?>
                             </select>
                         </label>

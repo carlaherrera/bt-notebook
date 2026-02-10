@@ -1,5 +1,6 @@
 <?php
 // /app/Views/admin/parceiros/index.php
+include __DIR__ . '/../../components/button.php';
 ?>
 
 <style>
@@ -25,14 +26,22 @@
                 <p class="text-sm text-slate-500 dark:text-slate-400">Gestão de academias e personals com estoque consignado.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="/admin/parceiros" class="inline-flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-800 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                    <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
-                    Atualizar lista
-                </a>
-                <a href="/admin/parceiros/novo" class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                    Novo parceiro
-                </a>
+                <?= renderButton([
+                    'text' => 'Atualizar lista',
+                    'variant' => 'secondary',
+                    'style' => 'outline',
+                    'icon' => 'refresh-ccw',
+                    'href' => '/admin/parceiros',
+                    'size' => 'md'
+                ]) ?>
+                <?= renderButton([
+                    'text' => 'Novo parceiro',
+                    'variant' => 'primary',
+                    'style' => 'solid',
+                    'icon' => 'plus',
+                    'href' => '/admin/parceiros/novo',
+                    'size' => 'md'
+                ]) ?>
             </div>
         </div>
     </header>
@@ -134,8 +143,21 @@
                     <div class="flex items-center justify-between text-[11px] text-gray-500 dark:text-gray-400">
                         <span class="inline-flex items-center gap-1"><i data-lucide="clock-3" class="w-3.5 h-3.5"></i> Atualizado: <?= htmlspecialchars($p['atualizado_em'] ?? $p['updated_at'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                         <div class="flex gap-1">
-                            <a href="/admin/parceiros/<?= (int)($p['id'] ?? 0) ?>/ver" class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800">Ver detalhes</a>
-                            <button class="px-3 py-1 rounded-lg bg-[var(--primary-500)] text-white hover:bg-[var(--primary-600)]">Transferir</button>
+                            <?= renderButton([
+                                'text' => 'Ver detalhes',
+                                'variant' => 'secondary',
+                                'style' => 'outline',
+                                'href' => '/admin/parceiros/' . (int)($p['id'] ?? 0) . '/ver',
+                                'size' => 'sm'
+                            ]) ?>
+                            <?= renderButton([
+                                'text' => 'Transferir',
+                                'variant' => 'primary',
+                                'style' => 'solid',
+                                'icon' => 'arrow-left-right',
+                                'href' => '/admin/movimentacoes/transferir?parceiro=' . (int)($p['id'] ?? 0),
+                                'size' => 'sm'
+                            ]) ?>
                         </div>
                     </div>
                 </div>

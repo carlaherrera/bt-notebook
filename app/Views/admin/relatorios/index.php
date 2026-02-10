@@ -63,8 +63,8 @@
             <div class="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm flex flex-col gap-3">
                 <div class="flex items-start justify-between gap-3">
                     <div>
-                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($rel['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Formato: <?= htmlspecialchars($rel['formato'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($rel['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400">Formato: <?= htmlspecialchars($rel['formato'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                         <p class="text-[11px] text-gray-500 dark:text-gray-400">Por: <?= htmlspecialchars($rel['usuario'] ?? '—', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                     </div>
                     <span class="text-[11px] px-2 py-[3px] rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300">Gerado: <?= htmlspecialchars($rel['gerado_em'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>

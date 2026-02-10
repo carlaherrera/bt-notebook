@@ -7,10 +7,10 @@ use App\Core\Security;
         <div>
             <p class="inline-flex items-center gap-2 rounded-full border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/70 px-3 py-1 text-xs font-semibold text-stone-700 dark:text-stone-100">
                 <i data-lucide="message-square" class="w-4 h-4"></i>
-                Ticket #<?= htmlspecialchars($ticket['id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                Ticket #<?= htmlspecialchars($ticket['id'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
             </p>
             <h1 class="text-2xl font-bold text-stone-900 dark:text-white">Conversa do suporte</h1>
-            <p class="text-sm text-stone-600 dark:text-stone-300">Status: <?= htmlspecialchars($ticket['status'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · Prioridade: <?= htmlspecialchars($ticket['prioridade'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+            <p class="text-sm text-stone-600 dark:text-stone-300">Status: <?= htmlspecialchars($ticket['status'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · Prioridade: <?= htmlspecialchars($ticket['prioridade'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
         </div>
         <div class="flex flex-wrap gap-2">
             <a href="/cliente/suporte" class="inline-flex items-center gap-2 rounded-xl border border-stone-200 dark:border-stone-700 px-4 py-2 text-sm font-semibold text-stone-700 dark:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800">
@@ -39,7 +39,7 @@ use App\Core\Security;
                                 <span><?= ($msg['autor_id'] ?? null) ? 'Você' : 'Atendimento' ?></span>
                                 <span><?= htmlspecialchars($dt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                             </div>
-                            <p class="mt-1 text-sm text-stone-800 dark:text-stone-100"><?= nl2br(htmlspecialchars($msg['mensagem'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) ?></p>
+                            <p class="mt-1 text-sm text-stone-800 dark:text-stone-100"><?= nl2br(htmlspecialchars($msg['mensagem'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) ?></p>
                         </div>
                     <?php endforeach; ?>
                 </div>
@@ -71,9 +71,9 @@ use App\Core\Security;
             <div class="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm">
                 <h3 class="text-sm font-semibold text-stone-900 dark:text-white">Detalhes</h3>
                 <p class="text-sm text-stone-700 dark:text-stone-200 mt-2">
-                    Assunto: <?= htmlspecialchars($ticket['assunto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br>
-                    Categoria: <?= htmlspecialchars($ticket['categoria'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br>
-                    Prioridade: <?= htmlspecialchars($ticket['prioridade'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br>
+                    Assunto: <?= htmlspecialchars($ticket['assunto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br>
+                    Categoria: <?= htmlspecialchars($ticket['categoria'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br>
+                    Prioridade: <?= htmlspecialchars($ticket['prioridade'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?><br>
                     Pedido: <?= $ticket['pedido_id'] ? '#'.(int)$ticket['pedido_id'] : '—' ?>
                 </p>
             </div>

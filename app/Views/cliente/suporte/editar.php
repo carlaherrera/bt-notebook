@@ -7,7 +7,7 @@ use App\Core\Security;
         <div>
             <p class="inline-flex items-center gap-2 rounded-full border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/70 px-3 py-1 text-xs font-semibold text-stone-700 dark:text-stone-100">
                 <i data-lucide="pencil" class="w-4 h-4"></i>
-                Editar ticket #<?= htmlspecialchars($ticket['id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                Editar ticket #<?= htmlspecialchars($ticket['id'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
             </p>
             <h1 class="text-2xl font-bold text-stone-900 dark:text-white">Ajustar ticket</h1>
             <p class="text-sm text-stone-600 dark:text-stone-300">Atualize status, prioridade e assunto.</p>
@@ -24,7 +24,7 @@ use App\Core\Security;
             <div class="p-4 rounded-2xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-sm space-y-3">
                 <label class="space-y-1 block text-sm text-stone-700 dark:text-stone-200">
                     <span class="font-semibold">Assunto</span>
-                    <input type="text" name="assunto" value="<?= htmlspecialchars($ticket['assunto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" required>
+                    <input type="text" name="assunto" value="<?= htmlspecialchars($ticket['assunto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" class="w-full rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 px-3 py-2 text-sm" required>
                 </label>
                 <div class="grid gap-3 md:grid-cols-3">
                     <label class="space-y-1 text-sm text-stone-700 dark:text-stone-200">

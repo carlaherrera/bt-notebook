@@ -60,6 +60,19 @@ class MovimentacoesController extends Controller
         ]);
     }
 
+    public function transferir(): void
+    {
+        $parceiros = $this->carregarParceiros();
+        $produtos = $this->carregarProdutos();
+        $parceiroSelecionado = isset($_GET['parceiro']) ? (int)$_GET['parceiro'] : null;
+
+        $this->layout('layouts/painel', 'admin/movimentacoes/transferir', [
+            'parceiros' => $parceiros,
+            'produtos' => $produtos,
+            'parceiroSelecionado' => $parceiroSelecionado,
+        ]);
+    }
+
     public function store(): void
     {
         $this->validateCsrf();
@@ -199,8 +212,16 @@ class MovimentacoesController extends Controller
 
     private function carregarProdutos(): array
     {
-        $stmt = $this->db->query("SELECT DISTINCT produto FROM " . Database::table('consignado_produtos') . " ORDER BY produto");
-        return array_column($stmt->fetchAll(PDO::FETCH_ASSOC) ?: [], 'produto');
+        $sql = "(
+                    SELECT nome FROM " . Database::table('produtos') . " WHERE status = 'ativo'
+                )
+                UNION
+                (
+                    SELECT DISTINCT produto AS nome FROM " . Database::table('consignado_produtos') . "
+                )
+                ORDER BY nome";
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
     private function carregarMovimentacoes(array $filtros): array

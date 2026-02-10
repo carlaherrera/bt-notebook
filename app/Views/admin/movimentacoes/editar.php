@@ -57,7 +57,8 @@ use App\Core\Security;
                 <span class="font-semibold">Produto</span>
                 <select name="produto" required class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-3 py-2 text-sm">
                     <?php foreach ($produtos as $p): ?>
-                        <option value="<?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" <?= ($mov['produto'] ?? '') === $p ? 'selected' : '' ?>><?= htmlspecialchars($p, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
+                        <?php $nomeProd = is_array($p) ? ($p['nome'] ?? '') : $p; ?>
+                        <option value="<?= htmlspecialchars($nomeProd, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>" <?= ($mov['produto'] ?? '') === $nomeProd ? 'selected' : '' ?>><?= htmlspecialchars($nomeProd, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></option>
                     <?php endforeach; ?>
                 </select>
             </label>

@@ -46,10 +46,10 @@
                     <i data-lucide="file-text" class="w-4 h-4"></i>
                     Relatório
                 </a>
-                <button class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
-                    <i data-lucide="send" class="w-4 h-4"></i>
+                <a href="/admin/movimentacoes/transferir?parceiro=<?= (int)($parceiro['id'] ?? 0) ?>" class="inline-flex items-center gap-2 rounded-xl bg-[var(--primary-500)] text-white px-4 py-2 text-sm font-semibold hover:bg-[var(--primary-600)] transition-colors">
+                    <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
                     Transferir estoque
-                </button>
+                </a>
             </div>
         </div>
     </header>
@@ -104,9 +104,9 @@
                     <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                         <?php foreach ($consignado as $item): ?>
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/60">
-                                <td class="px-3 py-2 font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($item['produto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['sku'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
-                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['categoria'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2 font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($item['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
+                                <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= htmlspecialchars($item['categoria'] ?? '-', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
                                 <td class="px-3 py-2 text-gray-900 dark:text-white"><?= (int)($item['estoque'] ?? 0) ?></td>
                                 <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= (int)($item['min'] ?? 0) ?></td>
                                 <td class="px-3 py-2 text-gray-600 dark:text-gray-300"><?= (int)($item['vendido_mes'] ?? 0) ?></td>

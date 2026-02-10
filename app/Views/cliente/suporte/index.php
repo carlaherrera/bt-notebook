@@ -52,17 +52,17 @@ use App\Core\Security;
                         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                             <div class="space-y-1">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-sm font-semibold text-stone-900 dark:text-white"><?= htmlspecialchars($ticket['id'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
+                                    <span class="text-sm font-semibold text-stone-900 dark:text-white"><?= htmlspecialchars($ticket['id'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></span>
                                     <span class="text-[11px] px-2 py-[3px] rounded-full <?= $statusClass ?>">
-                                        <?= htmlspecialchars($ticket['status'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                                        <?= htmlspecialchars($ticket['status'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                                     </span>
                                 </div>
-                                <p class="text-sm text-stone-700 dark:text-stone-200 font-semibold"><?= htmlspecialchars($ticket['assunto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                                <p class="text-sm text-stone-700 dark:text-stone-200 font-semibold"><?= htmlspecialchars($ticket['assunto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                                 <?php $dt = !empty($ticket['created_at']) ? date('d/m/Y H:i', strtotime($ticket['created_at'])) : ''; ?>
                                 <p class="text-xs text-stone-600 dark:text-stone-400">Criado: <?= htmlspecialchars($dt, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                             </div>
                             <div class="text-right text-xs text-stone-500 dark:text-stone-400">
-                                Prioridade: <?= htmlspecialchars($ticket['prioridade'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                                Prioridade: <?= htmlspecialchars($ticket['prioridade'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                             </div>
                         </div>
                         <div class="mt-3 flex flex-wrap gap-2 text-xs">

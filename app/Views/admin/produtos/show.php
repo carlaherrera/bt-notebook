@@ -22,12 +22,12 @@
                     Produto
                 </div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-                    <?= htmlspecialchars($produto['nome'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                    <?= htmlspecialchars($produto['nome'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                     <span class="text-[11px] px-2 py-[3px] rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300">
-                        <?= htmlspecialchars($produto['categoria'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
+                        <?= htmlspecialchars($produto['categoria'] ?? '-', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>
                     </span>
                 </h1>
-                <p class="text-sm text-slate-500 dark:text-slate-400">SKU <?= htmlspecialchars($produto['sku'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · <?= htmlspecialchars($produto['preco'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                <p class="text-sm text-slate-500 dark:text-slate-400">SKU <?= htmlspecialchars($produto['sku'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?> · <?= htmlspecialchars($produto['preco'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                 <div class="flex flex-wrap gap-3 text-xs text-gray-500 dark:text-gray-400">
                     <span class="inline-flex items-center gap-1"><i data-lucide="box" class="w-4 h-4"></i> Estoque loja: <?= (int)($produto['estoque_loja'] ?? 0) ?></span>
                     <span class="inline-flex items-center gap-1"><i data-lucide="truck" class="w-4 h-4"></i> Consignado: <?= (int)($produto['estoque_consignado'] ?? 0) ?></span>

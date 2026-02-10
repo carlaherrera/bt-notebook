@@ -75,13 +75,13 @@
                 ?>
                 <div class="p-3 rounded-xl border <?= $color ?> flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($item['produto'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                        <p class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($item['local'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($item['produto'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                        <p class="text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($item['local'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                     </div>
                     <div class="text-right text-sm font-semibold text-gray-900 dark:text-white">
                         Sys: <?= (int)($item['qtde_sistema'] ?? 0) ?><br>
                         Fís: <?= $item['qtde_fisica'] === null ? '—' : (int)$item['qtde_fisica'] ?>
-                        <div class="text-[11px] text-gray-500 dark:text-gray-400 capitalize"><?= htmlspecialchars($item['status'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
+                        <div class="text-[11px] text-gray-500 dark:text-gray-400 capitalize"><?= htmlspecialchars($item['status'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -98,11 +98,11 @@
                 <?php foreach ($historico as $h): ?>
                     <div class="p-3 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-900/60 flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($h['acao'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= htmlspecialchars($h['descricao'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
-                            <p class="text-[11px] text-gray-500 dark:text-gray-400">Por <?= htmlspecialchars($h['usuario'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                            <p class="text-sm font-semibold text-gray-900 dark:text-white"><?= htmlspecialchars($h['acao'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400"><?= htmlspecialchars($h['descricao'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
+                            <p class="text-[11px] text-gray-500 dark:text-gray-400">Por <?= htmlspecialchars($h['usuario'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></p>
                         </div>
-                        <div class="text-right text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($h['data'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
+                        <div class="text-right text-[11px] text-gray-500 dark:text-gray-400"><?= htmlspecialchars($h['data'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></div>
                     </div>
                 <?php endforeach; ?>
             </div>

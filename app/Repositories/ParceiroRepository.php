@@ -58,11 +58,18 @@ class ParceiroRepository
 
     public function produtos(int $parceiroId): array
     {
-        $stmt = $this->db->prepare(
-            "SELECT produto, sku, lote, nf, estoque, min, vendido_mes, devolucao, prazo_dev
-             FROM " . Database::table('consignado_produtos') . "
-             WHERE parceiro_id = :id"
-        );
+        $sql = "(
+                    SELECT produto, sku, lote, nf, estoque, min, vendido_mes, devolucao, prazo_dev
+                    FROM " . Database::table('consignado_produtos') . "
+                    WHERE parceiro_id = :id
+                )
+                UNION
+                (
+                    SELECT nome AS produto, sku, NULL AS lote, NULL AS nf, 0 AS estoque, minimo AS min, 0 AS vendido_mes, 0 AS devolucao, NULL AS prazo_dev
+                    FROM " . Database::table('produtos') . "
+                )
+                ORDER BY produto";
+        $stmt = $this->db->prepare($sql);
         $stmt->execute(['id' => $parceiroId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
