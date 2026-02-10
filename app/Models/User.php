@@ -24,17 +24,24 @@ class User
      * A entidade pode ser criada a partir de um array.
      */
     public static function fromArray(array $data): self
-{
-    $user = new self();
+    {
+        $user = new self();
 
-    foreach ($data as $key => $value) {
-        // Ignora índices numéricos e só aceita chaves da entidade
-        if (is_string($key) && property_exists($user, $key)) {
-            $user->{$key} = $value;
+        foreach ($data as $key => $value) {
+            // Ignora índices numéricos e só aceita chaves da entidade
+            if (is_string($key) && property_exists($user, $key)) {
+                // Type casting para propriedades tipadas
+                if ($key === 'id' && $value !== null) {
+                    $user->{$key} = (int)$value;
+                } elseif ($key === 'status' && $value !== null) {
+                    $user->{$key} = (int)$value;
+                } else {
+                    $user->{$key} = $value;
+                }
+            }
         }
-    }
 
-    return $user;
-}
+        return $user;
+    }
 
 }
